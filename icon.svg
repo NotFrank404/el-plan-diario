@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Icono de El Plan Diario">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff8f0" />
+      <stop offset="55%" stop-color="#ffe2cc" />
+      <stop offset="100%" stop-color="#ffd1b3" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f08362" />
+      <stop offset="100%" stop-color="#e76f51" />
+    </linearGradient>
+  </defs>
+  <!-- Fondo redondeado cálido -->
+  <rect width="512" height="512" rx="116" fill="url(#bg)" />
+  <!-- Halo suave decorativo -->
+  <circle cx="256" cy="248" r="168" fill="#ffffff" fill-opacity="0.65" />
+  <!-- Cubo de palomitas acogedor -->
+  <path d="M168 232h176l-24 164a28 28 0 0 1-28 24h-72a28 28 0 0 1-28-24z" fill="url(#accent)" />
+  <!-- Rayas crema del cubo -->
+  <path d="M214 232l10 188h24l-6-188zm60 0l-6 188h24l10-188z" fill="#fff8f0" fill-opacity="0.88" />
+  <!-- Palomitas esponjosas -->
+  <circle cx="198" cy="204" r="38" fill="#fff6d6" stroke="#f2cf7e" stroke-width="8" />
+  <circle cx="256" cy="182" r="44" fill="#fffdf5" stroke="#f2cf7e" stroke-width="8" />
+  <circle cx="314" cy="204" r="38" fill="#fff6d6" stroke="#f2cf7e" stroke-width="8" />
+  <circle cx="228" cy="218" r="32" fill="#fffdf5" stroke="#f2cf7e" stroke-width="8" />
+  <circle cx="286" cy="218" r="32" fill="#fff6d6" stroke="#f2cf7e" stroke-width="8" />
+  <!-- Corazón cálido en el centro (Puente Emocional) -->
+  <path d="M256 352c-3-2-42-28-42-56 0-15 12-26 26-26 9 0 14 5 16 10 2-5 7-10 16-10 14 0 26 11 26 26 0 28-39 54-42 56z" fill="#fff8f0" />
+</svg>

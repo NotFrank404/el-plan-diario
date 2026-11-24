@@ -1,0 +1,3599 @@
+/* ==========================================================================
+   EL PLAN DIARIO — ESTILOS (EL MAQUILLAJE Y LOS COLORES DE LA WEB)
+   ==========================================================================
+   ¡Hola! Aquí arriba están las "cajas de pintura" principales de la web.
+   Si cambias un color aquí, se actualiza automáticamente en toda la página.
+   ========================================================================== */
+
+:root {
+  /* Soporte nativo para Modo día y Modo Cine Nocturno (respeta el sistema por defecto) */
+  color-scheme: light dark;
+
+  /* ========================================================================
+     PALETA DÍA Y NOCHE ("SOFÁ Y MANTA", SIN NEGRO PURO AGRESIVO)
+     Aquí puedes personalizar los colores de ambos modos en un solo lugar.
+     ======================================================================== */
+  --bg-base-light: #fff8f0;           /* Crema cálido de fondo general */
+  --bg-base-dark: #0f0d15;            /* Noche de cine profunda e inconfundible */
+  --surface-card-light: #ffffff;      /* Fondo limpio de las tarjetas */
+  --surface-card-dark: #191622;       /* Tarjetas en azul noche cálido */
+  --surface-elevated-light: #fffaf5;  /* Fondo secundario suave */
+  --surface-elevated-dark: #231f2e;   /* Fondo secundario elevado en noche */
+  --text-main-light: #2d2320;         /* Marrón oscuro cálido */
+  --text-main-dark: #f7f1e8;          /* Crema luminoso muy legible */
+  --text-soft-light: #63534d;         /* Texto secundario suave */
+  --text-soft-dark: #bfb8cc;          /* Texto secundario suave en noche */
+  --border-soft-light: #eedfd0;       /* Borde beige delicado */
+  --border-soft-dark: #353045;        /* Borde nocturno definido */
+
+  /* COLORES AMBIENTALES DINÁMICOS (JavaScript los cambia según tu emoción) */
+  --mood-bg-1-light: #ffe2cc;
+  --mood-bg-1-dark: rgba(231, 111, 81, 0.2);
+  --mood-bg-2-light: #d8f3dc;
+  --mood-bg-2-dark: rgba(94, 196, 152, 0.16);
+  --mood-bg-3-light: #fff1b8;
+  --mood-bg-3-dark: rgba(244, 185, 97, 0.12);
+  --mood-accent-light: #e76f51;
+  --mood-accent-dark: #f4977b;
+  --mood-accent-soft-light: #fff0e6;
+  --mood-accent-soft-dark: #362823;
+  /* Color del texto sobre botones rellenos con el color emocional (en Modo Noche usamos texto oscuro para mantener buen contraste) */
+  --on-accent-light: #ffffff;
+  --on-accent-dark: #191622;
+
+  /* Valores activos (respaldo para navegadores sin light-dark()) */
+  --bg-base: var(--bg-base-light);
+  --surface-card: var(--surface-card-light);
+  --surface-elevated: var(--surface-elevated-light);
+  --text-main: var(--text-main-light);
+  --text-soft: var(--text-soft-light);
+  --border-soft: var(--border-soft-light);
+  --mood-bg-1: var(--mood-bg-1-light);
+  --mood-bg-2: var(--mood-bg-2-light);
+  --mood-bg-3: var(--mood-bg-3-light);
+  --mood-accent: var(--mood-accent-light);
+  --mood-accent-soft: var(--mood-accent-soft-light);
+  --on-accent: var(--on-accent-light);
+
+  /* Respaldo automático por preferencia del sistema si no hay light-dark() */
+  @media (prefers-color-scheme: dark) {
+    --bg-base: var(--bg-base-dark);
+    --surface-card: var(--surface-card-dark);
+    --surface-elevated: var(--surface-elevated-dark);
+    --text-main: var(--text-main-dark);
+    --text-soft: var(--text-soft-dark);
+    --border-soft: var(--border-soft-dark);
+    --mood-bg-1: var(--mood-bg-1-dark);
+    --mood-bg-2: var(--mood-bg-2-dark);
+    --mood-bg-3: var(--mood-bg-3-dark);
+    --mood-accent: var(--mood-accent-dark);
+    --mood-accent-soft: var(--mood-accent-soft-dark);
+    --on-accent: var(--on-accent-dark);
+  }
+
+  /* Función moderna light-dark(): sigue automáticamente el color-scheme activo */
+  @supports (color: light-dark(white, black)) {
+    --bg-base: light-dark(var(--bg-base-light), var(--bg-base-dark));
+    --surface-card: light-dark(var(--surface-card-light), var(--surface-card-dark));
+    --surface-elevated: light-dark(var(--surface-elevated-light), var(--surface-elevated-dark));
+    --text-main: light-dark(var(--text-main-light), var(--text-main-dark));
+    --text-soft: light-dark(var(--text-soft-light), var(--text-soft-dark));
+    --border-soft: light-dark(var(--border-soft-light), var(--border-soft-dark));
+    --mood-bg-1: light-dark(var(--mood-bg-1-light), var(--mood-bg-1-dark));
+    --mood-bg-2: light-dark(var(--mood-bg-2-light), var(--mood-bg-2-dark));
+    --mood-bg-3: light-dark(var(--mood-bg-3-light), var(--mood-bg-3-dark));
+    --mood-accent: light-dark(var(--mood-accent-light), var(--mood-accent-dark));
+    --mood-accent-soft: light-dark(var(--mood-accent-soft-light), var(--mood-accent-soft-dark));
+    --on-accent: light-dark(var(--on-accent-light), var(--on-accent-dark));
+  }
+
+  /* Controles nativos del navegador y barra de desplazamiento en armonía */
+  accent-color: var(--mood-accent);
+  scrollbar-color: light-dark(#c7b2a3, #5c4b43) light-dark(#fff2e6, #1b1614);
+
+  /* FORMA Y TIPOGRAFÍA */
+  --radius-card: 22px;          /* Qué tan redondeadas son las esquinas */
+  --font-main: ui-rounded, 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --target-size: 24px;          /* Tamaño mínimo táctil (sube a 44px en pantallas táctiles) */
+}
+
+@media (pointer: coarse) {
+  :root {
+    --target-size: 44px;
+  }
+}
+
+/* Sincronizamos tanto <meta name="color-scheme"> como data-theme (máxima compatibilidad móvil) */
+:root[data-theme="dark"],
+:root:has(> head > meta[name="color-scheme"][content="dark"]) {
+  color-scheme: dark;
+  --bg-base: var(--bg-base-dark);
+  --surface-card: var(--surface-card-dark);
+  --surface-elevated: var(--surface-elevated-dark);
+  --text-main: var(--text-main-dark);
+  --text-soft: var(--text-soft-dark);
+  --border-soft: var(--border-soft-dark);
+  --mood-bg-1: var(--mood-bg-1-dark);
+  --mood-bg-2: var(--mood-bg-2-dark);
+  --mood-bg-3: var(--mood-bg-3-dark);
+  --mood-accent: var(--mood-accent-dark);
+  --mood-accent-soft: var(--mood-accent-soft-dark);
+  --on-accent: var(--on-accent-dark);
+}
+
+:root[data-theme="light"],
+:root:has(> head > meta[name="color-scheme"][content="light"]) {
+  color-scheme: light;
+  --bg-base: var(--bg-base-light);
+  --surface-card: var(--surface-card-light);
+  --surface-elevated: var(--surface-elevated-light);
+  --text-main: var(--text-main-light);
+  --text-soft: var(--text-soft-light);
+  --border-soft: var(--border-soft-light);
+  --mood-bg-1: var(--mood-bg-1-light);
+  --mood-bg-2: var(--mood-bg-2-light);
+  --mood-bg-3: var(--mood-bg-3-light);
+  --mood-accent: var(--mood-accent-light);
+  --mood-accent-soft: var(--mood-accent-soft-light);
+  --on-accent: var(--on-accent-light);
+}
+
+/* Ajuste básico para que los tamaños incluyan bordes y rellenos sin sorpresas */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-main);
+  color: var(--text-main);
+  background-color: var(--bg-base);
+  line-height: 1.55;
+  overflow-wrap: break-word;
+  position: relative;
+}
+
+/* Imágenes, enlaces y tipografía fluida que nunca desbordan en móvil */
+img,
+video {
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+:where(a, code) {
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+/* Garantizamos áreas táctiles cómodas en botones y controles */
+:where(button, select, textarea, input:not([type="checkbox"], [type="radio"]), [role="button"]) {
+  min-block-size: var(--target-size);
+  min-inline-size: var(--target-size);
+}
+
+/* Fondo colorido con manchas suaves que cambian al elegir emociones */
+.ambient-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 12% 14%, var(--mood-bg-1) 0%, transparent 48%),
+    radial-gradient(circle at 88% 82%, var(--mood-bg-2) 0%, transparent 50%),
+    radial-gradient(circle at 85% 12%, var(--mood-bg-3) 0%, transparent 35%);
+  transition: background 0.6s ease;
+}
+
+/* Contenedor principal centrado con respeto a las zonas seguras (notch y barra inferior) */
+.page-shell {
+  width: min(1040px, 100% - 2rem);
+  margin: 0 auto;
+  padding-top: max(2.25rem, calc(1rem + env(safe-area-inset-top, 0px)));
+  padding-bottom: max(3.5rem, calc(1.75rem + env(safe-area-inset-bottom, 0px)));
+  padding-inline: env(safe-area-inset-left, 0px) env(safe-area-inset-right, 0px);
+}
+
+/* ==========================================================================
+   ZONA 1: CABECERA ACOGEDORA ("EL PLAN DIARIO")
+   ========================================================================== */
+.hero {
+  text-align: center;
+  margin-bottom: 2.75rem;
+}
+
+.hero-top-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-bottom: 0.9rem;
+}
+
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.95rem;
+  border-radius: 999px;
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-soft);
+  box-shadow: 0 6px 18px rgba(120, 74, 48, 0.07);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--mood-accent);
+  transition: color 0.35s ease;
+}
+
+/* Botón compacto de "Filtros opcionales" en la cabecera (Fase 9) */
+.filters-nav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background-color: light-dark(#f6f1ff, #2a223b);
+  border: 1.5px solid light-dark(#d9c7ff, #54437a);
+  box-shadow: 0 6px 18px light-dark(rgba(120, 74, 48, 0.07), rgba(0, 0, 0, 0.3));
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: light-dark(#5b21b6, #d8c4ff);
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.filters-nav-pill:hover {
+  transform: translateY(-2px);
+  border-color: light-dark(#7c3aed, #a78bfa);
+  background-color: light-dark(#ede4ff, #352b4a);
+}
+
+.filters-nav-pill:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 3px;
+}
+
+.filters-nav-pill.has-active-filters {
+  border-color: light-dark(#7c3aed, #a78bfa);
+  background-color: light-dark(#ede4ff, #382c52);
+}
+
+.filters-count-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.45rem;
+  padding: 0.08rem 0.42rem;
+  border-radius: 999px;
+  background-color: light-dark(#7c3aed, #9b72f2);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.filters-count-pill[hidden] {
+  display: none;
+}
+
+.botiquin-nav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background-color: #fff0f4;
+  border: 1.5px solid #f5bfd0;
+  box-shadow: 0 6px 18px rgba(120, 74, 48, 0.07);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #9f1239;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.botiquin-nav-pill:hover {
+  transform: translateY(-2px);
+  border-color: #e11d48;
+  background-color: #ffe4ec;
+}
+
+.botiquin-nav-pill:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 3px;
+}
+
+.botiquin-count-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.45rem;
+  padding: 0.08rem 0.42rem;
+  border-radius: 999px;
+  background-color: #e11d48;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+/* Botón compacto de Modo Cine Nocturno (Fase 6) */
+.theme-toggle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background-color: light-dark(#ffffff, #312824);
+  border: 1.5px solid light-dark(#eedfd0, #52423a);
+  box-shadow: 0 6px 18px light-dark(rgba(120, 74, 48, 0.07), rgba(0, 0, 0, 0.3));
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: light-dark(#4a3830, #f7d9a8);
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.theme-toggle-pill:hover {
+  transform: translateY(-2px);
+  border-color: var(--mood-accent);
+  background-color: light-dark(#fff5ec, #3b302b);
+}
+
+.theme-toggle-pill:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 3px;
+}
+
+/* Mostramos solo la etiqueta de la acción opuesta al tema actual (incluso sin JS) */
+.theme-option-dark,
+.theme-option-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.theme-option-light {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .theme-option-dark {
+    display: none;
+  }
+  .theme-option-light {
+    display: inline-flex;
+  }
+}
+
+:root[data-theme="dark"] .theme-option-dark,
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-option-dark {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-option-light,
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-option-light {
+  display: inline-flex;
+}
+
+:root[data-theme="light"] .theme-option-dark,
+:root:has(> head > meta[name="color-scheme"][content="light"]) .theme-option-dark {
+  display: inline-flex;
+}
+
+:root[data-theme="light"] .theme-option-light,
+:root:has(> head > meta[name="color-scheme"][content="light"]) .theme-option-light {
+  display: none;
+}
+
+/* Clase accesible para ocultar inputs visualmente sin sacarlos del árbol de accesibilidad */
+.visually-hidden {
+  position: absolute;
+  clip-path: inset(50%);
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  white-space: nowrap;
+}
+
+.hero-title {
+  margin: 0;
+  font-size: clamp(2rem, 1.35rem + 3.2vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.hero-subtitle {
+  margin: 0.75rem auto 0;
+  max-width: 60ch;
+  font-size: 1.08rem;
+  color: var(--text-soft);
+}
+
+/* ==========================================================================
+   ZONAS 2 Y 3: SECCIONES DE PASOS Y TARJETAS EMOCIONALES
+   ========================================================================== */
+.planner {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.step-section {
+  background-color: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(238, 223, 208, 0.9);
+  border-radius: 28px;
+  padding: 1.75rem;
+  box-shadow: 0 14px 34px rgba(122, 78, 52, 0.06);
+}
+
+.step-header {
+  margin-bottom: 1.35rem;
+}
+
+.step-pill {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background-color: #ffe8d6;
+  color: #b84b2c;
+  margin-bottom: 0.5rem;
+}
+
+.step-pill-warm {
+  background-color: #e2f5ea;
+  color: #1f7a53;
+}
+
+.step-header h2 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.5vw, 1.65rem);
+  font-weight: 800;
+}
+
+.step-description {
+  margin: 0.35rem 0 0;
+  color: var(--text-soft);
+  font-size: 0.98rem;
+}
+
+/* Cuadrícula automática: se adapta sola a móvil, tablet y ordenador */
+.emotion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+/* Estilo base de cada botón-tarjeta emocional */
+.emotion-card {
+  /* Variables internas de cada tarjeta que cambian según su color pastel */
+  --card-bg: #fff6ef;
+  --card-border: #f5cdb4;
+  --card-accent: #e76f51;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 1.2rem 1.25rem;
+  border-radius: var(--radius-card);
+  border: 2px solid var(--card-border);
+  background-color: var(--card-bg);
+  color: var(--text-main);
+  font-family: inherit;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 6px 14px rgba(85, 55, 38, 0.05);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/* Colores pastel acogedores para cada tarjeta */
+.card-peach {
+  --card-bg: #fff4ec;
+  --card-border: #ffd2b3;
+  --card-accent: #d96b38;
+}
+
+.card-coral {
+  --card-bg: #fff0f0;
+  --card-border: #ffc2c2;
+  --card-accent: #d64550;
+}
+
+.card-sky {
+  --card-bg: #eef7ff;
+  --card-border: #bfe0ff;
+  --card-accent: #2c7be5;
+}
+
+.card-mint {
+  --card-bg: #eefcf4;
+  --card-border: #b8eccf;
+  --card-accent: #218c62;
+}
+
+.card-honey {
+  --card-bg: #fff9e6;
+  --card-border: #ffe08a;
+  --card-accent: #c97a00;
+}
+
+.card-lavender {
+  --card-bg: #f6f1ff;
+  --card-border: #d9c5ff;
+  --card-accent: #7b4ce2;
+}
+
+.emotion-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--card-accent);
+  box-shadow: 0 12px 22px rgba(85, 55, 38, 0.1);
+}
+
+/* Resaltado claro cuando navegas con teclado */
+.emotion-card:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 3px;
+}
+
+/* Estado cuando la tarjeta está ELEGIDA (aria-pressed="true") */
+.emotion-card[aria-pressed="true"] {
+  background-color: #ffffff;
+  border-color: var(--card-accent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--card-accent) 22%, transparent),
+    0 14px 26px rgba(85, 55, 38, 0.12);
+  transform: translateY(-3px);
+}
+
+/* Pequeña marca ✓ arriba a la derecha cuando la tarjeta está elegida */
+.emotion-card[aria-pressed="true"]::after {
+  content: "✓ Elegida";
+  position: absolute;
+  top: 0.9rem;
+  right: 0.95rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background-color: var(--card-accent);
+  color: #ffffff;
+}
+
+.card-emoji {
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.card-title {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.card-desc {
+  font-size: 0.9rem;
+  color: var(--text-soft);
+}
+
+/* ==========================================================================
+   ZONA 4: RESUMEN DEL PUENTE EMOCIONAL
+   ========================================================================== */
+.bridge-summary {
+  background: linear-gradient(135deg, #ffffff 0%, var(--mood-accent-soft) 100%);
+  border: 2px solid color-mix(in srgb, var(--mood-accent) 30%, var(--border-soft));
+  border-radius: 28px;
+  padding: 2rem;
+  box-shadow: 0 18px 40px rgba(122, 78, 52, 0.09);
+  transition: background 0.45s ease, border-color 0.45s ease;
+}
+
+.bridge-eyebrow {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mood-accent);
+  margin-bottom: 0.35rem;
+}
+
+.bridge-header h2 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.6vw, 1.75rem);
+  font-weight: 800;
+}
+
+.bridge-capsules {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 1.4rem 0;
+}
+
+.bridge-capsule {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.95rem 1.2rem;
+  border-radius: 18px;
+  background-color: #ffffff;
+  border: 2px solid var(--mood-accent);
+  box-shadow: 0 6px 14px rgba(85, 55, 38, 0.06);
+  transition: border-color 0.3s ease, opacity 0.3s ease;
+}
+
+.bridge-capsule.is-empty {
+  border-style: dashed;
+  border-color: #d6c3b2;
+  opacity: 0.82;
+}
+
+.capsule-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-soft);
+}
+
+.capsule-value {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.bridge-arrow {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--mood-accent);
+}
+
+.bridge-message {
+  margin: 0 0 1.25rem;
+  font-size: 1.04rem;
+  color: var(--text-main);
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(238, 223, 208, 0.9);
+}
+
+.bridge-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.btn-primary,
+.btn-secondary {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 0.9rem 1.5rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease, background-color 0.3s ease;
+}
+
+.btn-primary {
+  border: none;
+  background-color: var(--mood-accent);
+  /* Texto adaptativo: blanco en Modo Día y oscuro (#191622) en Modo Noche */
+  color: var(--on-accent);
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--mood-accent) 28%, transparent);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 24px color-mix(in srgb, var(--mood-accent) 34%, transparent);
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  color: var(--text-main);
+  border: 2px solid var(--border-soft);
+}
+
+.btn-secondary:hover {
+  border-color: var(--mood-accent);
+  transform: translateY(-2px);
+}
+
+.site-footer {
+  text-align: center;
+  margin-top: 2.5rem;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   ZONA 5: TARJETA DE LA RECETA EMOCIONAL (FASE 2)
+   ==========================================================================
+   Aquí puedes personalizar los colores pastel de las cajas de géneros,
+   etiquetas y avisos de tu receta de cine.
+   ========================================================================== */
+.recipe-card {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  background-color: #ffffff;
+  border: 2px solid color-mix(in srgb, var(--mood-accent) 35%, var(--border-soft));
+  border-radius: 28px;
+  padding: 2rem;
+  box-shadow: 0 18px 40px rgba(122, 78, 52, 0.09);
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    display,
+    opacity ease-out,
+    translate ease-out,
+    border-color ease;
+  transition-duration: 0.35s;
+  /* Separado de transition para que navegadores antiguos no ignoren la regla entera */
+  transition-behavior: allow-discrete;
+}
+
+/* Estado inicial al aparecer la tarjeta por primera vez */
+@starting-style {
+  .recipe-card {
+    opacity: 0;
+    translate: 0 18px;
+  }
+}
+
+/* Estado visual al ocultarse suavemente */
+.recipe-card:where([hidden], [data-closing]) {
+  opacity: 0;
+  translate: 0 18px;
+}
+
+.recipe-card[hidden] {
+  display: none;
+}
+
+.recipe-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.recipe-topline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.15rem;
+}
+
+.recipe-eyebrow {
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mood-accent);
+}
+
+.recipe-adjustment-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background-color: var(--mood-accent-soft);
+  border: 1.5px solid color-mix(in srgb, var(--mood-accent) 30%, var(--border-soft));
+  color: var(--text-main);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+#recipe-heading {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.8vw, 1.85rem);
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+#recipe-heading:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 4px;
+  border-radius: 10px;
+}
+
+#recipe-heading:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.recipe-subtitle {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.recipe-block {
+  border-radius: 20px;
+  padding: 1.2rem;
+  border: 1.5px solid var(--border-soft);
+}
+
+.recipe-block h3 {
+  margin: 0;
+  font-size: 1.04rem;
+  font-weight: 800;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+/* COLORES DE LAS CAJAS INTERNAS DE LA RECETA (AQUÍ PUEDES CAMBIARLOS) */
+.recipe-block-include {
+  background-color: #f1fbf5;
+  border-color: #bde8ce;
+}
+
+.recipe-block-exclude {
+  background-color: #fff3f3;
+  border-color: #ffd0d0;
+}
+
+.recipe-block-vibe {
+  background-color: #fffaf0;
+  border-color: #f5dfba;
+}
+
+.genre-pill-list {
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.genre-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.genre-pill-include {
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid #9ae6b4;
+}
+
+.genre-pill-exclude {
+  background-color: #ffe4e6;
+  color: #9f1239;
+  border: 1px solid #fda4af;
+}
+
+.recipe-vibe-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin: 0.85rem 0 0;
+}
+
+.vibe-item {
+  background-color: #ffffff;
+  border: 1px solid #eedfd0;
+  border-radius: 14px;
+  padding: 0.8rem 0.95rem;
+}
+
+.vibe-item dt {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-soft);
+}
+
+.vibe-item dd {
+  margin: 0.25rem 0 0;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* Selector interactivo de nota mínima (Fase 2) */
+.rating-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.rating-slider {
+  width: 100%;
+  margin: 0.5rem 0 0.2rem;
+  accent-color: var(--mood-accent);
+  cursor: pointer;
+}
+
+.rating-slider:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.rating-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.74rem;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.rating-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+.rating-reset-btn {
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: var(--mood-accent-soft);
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.rating-reset-btn:focus-visible {
+  outline: 2px solid var(--mood-accent);
+  outline-offset: 2px;
+}
+
+.recipe-explanation {
+  margin: 1rem 0 0;
+  padding: 0.85rem 1rem;
+  border-left: 4px solid var(--mood-accent);
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.88);
+  color: var(--text-main);
+  font-size: 0.97rem;
+}
+
+.recipe-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.phase3-notice {
+  margin: 0;
+  padding: 0.95rem 1.15rem;
+  border-radius: 16px;
+  background-color: #fff6db;
+  border: 1.5px solid #f7cf6b;
+  color: #5c4300;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.recipe-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.btn-small {
+  font-size: 0.88rem;
+  padding: 0.58rem 1rem;
+}
+
+/* ==========================================================================
+   CAJA DE CONEXIÓN A TMDB (FASE 3 — API KEY Y GUÍA PASO A PASO)
+   ========================================================================== */
+.tmdb-key-box {
+  background-color: #fffaf4;
+  border: 1.5px solid var(--border-soft);
+  border-radius: 20px;
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.tmdb-key-box[hidden] {
+  display: none;
+}
+
+.tmdb-key-box.is-configured {
+  background-color: #f3fbf6;
+  border-color: #bde8ce;
+}
+
+.tmdb-key-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.tmdb-key-title-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.tmdb-key-icon {
+  font-size: 1.4rem;
+  line-height: 1.2;
+}
+
+.tmdb-key-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.tmdb-key-status {
+  margin: 0.15rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.tmdb-key-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed var(--border-soft);
+}
+
+.tmdb-key-form[hidden] {
+  display: none;
+}
+
+.tmdb-key-label {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.tmdb-key-input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.tmdb-key-input {
+  flex: 1 1 240px;
+  min-inline-size: 0;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.62rem 0.9rem;
+  border-radius: 12px;
+  border: 1.5px solid #decbb8;
+  background-color: #ffffff;
+  color: var(--text-main);
+}
+
+.tmdb-key-input:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 2px;
+  border-color: var(--mood-accent);
+}
+
+/* Acordeón de ayuda para conseguir la API Key de TMDB */
+.tmdb-help-details {
+  margin-top: 0.25rem;
+  background-color: #ffffff;
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 0.65rem 0.9rem;
+}
+
+.tmdb-help-details > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.55ch;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--mood-accent);
+  cursor: pointer;
+}
+
+.tmdb-help-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.tmdb-help-details > summary::before {
+  content: "▸";
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+  rotate: 0deg;
+}
+
+.tmdb-help-details[open] > summary::before {
+  rotate: 90deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tmdb-help-details > summary::before {
+    transition: rotate 0.2s ease;
+  }
+}
+
+.tmdb-help-details > summary:focus-visible {
+  outline: 2px solid var(--mood-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.tmdb-help-content {
+  margin-top: 0.65rem;
+  font-size: 0.88rem;
+  color: var(--text-main);
+}
+
+.tmdb-help-steps {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.tmdb-help-steps a,
+.tmdb-attribution a {
+  color: var(--mood-accent);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   ZONA 6: CARTELERA DE PELÍCULAS REALES DE TMDB (FASE 3)
+   ==========================================================================
+   Aquí puedes cambiar el tamaño de las tarjetas de películas, colores
+   de la nota o cuántas líneas de sinopsis se muestran.
+   ========================================================================== */
+.movies-section {
+  background-color: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(8px);
+  border: 2px solid color-mix(in srgb, var(--mood-accent) 32%, var(--border-soft));
+  border-radius: 28px;
+  padding: 2rem;
+  box-shadow: 0 18px 40px rgba(122, 78, 52, 0.09);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.movies-section[hidden] {
+  display: none;
+}
+
+.movies-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.movies-topline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+#movies-heading {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.8vw, 1.85rem);
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+#movies-heading:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 4px;
+  border-radius: 10px;
+}
+
+#movies-heading:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.movies-feedback {
+  padding: 1.35rem 1.25rem;
+  border-radius: 20px;
+  background-color: #fffaf0;
+  border: 1.5px solid #f5dfba;
+  color: var(--text-main);
+  font-weight: 700;
+  text-align: center;
+}
+
+.movies-feedback.is-error {
+  background-color: #fff3f3;
+  border-color: #ffc2c2;
+  color: #8c1d28;
+}
+
+.movies-feedback[hidden] {
+  display: none;
+}
+
+/* Cuadrícula adaptable de pósters y tarjetas de cine */
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  gap: 1.25rem;
+}
+
+/* Cada película es un <article class="movie-card"> siguiendo las mejores prácticas */
+.movie-card {
+  grid-row: span 4;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: subgrid;
+  row-gap: 0.65rem;
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-soft);
+  border-radius: 22px;
+  padding: 0.85rem;
+  box-shadow: 0 10px 24px rgba(85, 55, 38, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--mood-accent);
+  box-shadow: 0 16px 30px rgba(85, 55, 38, 0.12);
+}
+
+/* 1. Región Media: Botón accesible que envuelve el póster o su respaldo elegante */
+.movie-poster-btn {
+  display: block;
+  inline-size: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  cursor: pointer;
+  text-align: inherit;
+  font: inherit;
+  color: inherit;
+}
+
+.movie-poster-btn:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 2px;
+}
+
+.movie-poster {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 16px;
+  background-color: #f7ede2;
+}
+
+.movie-card > .media,
+.movie-poster-btn > .media {
+  aspect-ratio: 2 / 3;
+  border-radius: 16px;
+  background: linear-gradient(145deg, var(--mood-bg-1), var(--mood-bg-2));
+  border: 1px dashed var(--border-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  gap: 0.5rem;
+  color: var(--text-main);
+}
+
+.poster-fallback-emoji {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.poster-fallback-text {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+
+/* 2. Región Header: Año, puntuación y título en español */
+.movie-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-inline: 0.2rem;
+}
+
+.movie-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.movie-year-badge {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-soft);
+  background-color: #f7efe6;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+}
+
+.movie-score-badge {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #7c4a00;
+  background-color: #fff3c4;
+  border: 1px solid #f7d97e;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+}
+
+.movie-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--text-main);
+}
+
+/* 3. Región Content: Sinopsis corta limitada a 4 líneas para mantener el orden visual */
+.movie-synopsis {
+  margin: 0;
+  padding-inline: 0.2rem;
+  padding-block-end: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  line-clamp: 4;
+  overflow: clip;
+}
+
+/* 4. Región Footer: Botones para ver detalles o marcar la película como "Ya la vi" */
+.movie-card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-inline: 0.2rem;
+  padding-block-start: 0.45rem;
+  border-top: 1px dashed var(--border-soft);
+}
+
+.btn-movie-details {
+  inline-size: 100%;
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 800;
+  padding: 0.58rem 0.85rem;
+  border-radius: 12px;
+  border: none;
+  background-color: var(--mood-accent);
+  color: var(--on-accent);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--mood-accent) 22%, transparent);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.btn-movie-details:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  box-shadow: 0 10px 18px color-mix(in srgb, var(--mood-accent) 30%, transparent);
+}
+
+.btn-movie-details:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 2px;
+}
+
+.btn-watched {
+  inline-size: 100%;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.55rem 0.85rem;
+  border-radius: 12px;
+  border: 1.5px solid var(--border-soft);
+  background-color: #fffaf4;
+  color: var(--text-main);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.btn-watched:hover {
+  background-color: var(--mood-accent-soft);
+  border-color: var(--mood-accent);
+  color: var(--mood-accent);
+  transform: translateY(-1px);
+}
+
+.btn-watched:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   CAJÓN DE PELÍCULAS YA VISTAS (GUARDADAS EN EL NAVEGADOR)
+   ========================================================================== */
+.watched-drawer {
+  background-color: #fffaf4;
+  border: 1.5px solid var(--border-soft);
+  border-radius: 20px;
+  padding: 0.95rem 1.2rem;
+}
+
+.watched-drawer[hidden] {
+  display: none;
+}
+
+.watched-drawer > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.55ch;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.watched-drawer > summary::-webkit-details-marker {
+  display: none;
+}
+
+.watched-drawer > summary::before {
+  content: "▸";
+  display: inline-block;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--mood-accent);
+  flex-shrink: 0;
+  rotate: 0deg;
+}
+
+.watched-drawer[open] > summary::before {
+  rotate: 90deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .watched-drawer > summary::before {
+    transition: rotate 0.2s ease;
+  }
+}
+
+.watched-drawer > summary:focus-visible {
+  outline: 2px solid var(--mood-accent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.watched-drawer-body {
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px dashed var(--border-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.watched-drawer-hint {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-soft);
+}
+
+.watched-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  flex-wrap: balance;
+  gap: 0.55rem;
+}
+
+.watched-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.38rem 0.5rem 0.38rem 0.85rem;
+  border-radius: 999px;
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-soft);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-main);
+  box-shadow: 0 3px 8px rgba(85, 55, 38, 0.04);
+}
+
+.watched-remove-btn {
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid #f5cdb4;
+  background-color: #fff4ec;
+  color: #b84b2c;
+  cursor: pointer;
+}
+
+.watched-remove-btn:hover {
+  background-color: #ffe2cc;
+  border-color: var(--mood-accent);
+}
+
+.watched-remove-btn:focus-visible {
+  outline: 2px solid var(--mood-accent);
+  outline-offset: 2px;
+}
+
+.watched-drawer-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.tmdb-attribution {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   ZONA 7: BOTÓN DE OTRO LOTE Y VENTANA MODAL DE DETALLES (<dialog>, FASE 4)
+   ==========================================================================
+   Aquí puedes personalizar el tamaño, los colores y el fondo difuminado
+   de la ventana emergente de detalles, tráiler y plataformas de streaming.
+   ========================================================================== */
+.movies-batch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  padding-top: 0.35rem;
+}
+
+.movies-batch-actions[hidden] {
+  display: none;
+}
+
+.movies-page-info {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+
+/* Reglas obligatorias para evitar que la página de detrás haga scroll al abrir el modal */
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background-color: rgba(45, 35, 32, 0.56);
+  backdrop-filter: blur(4px);
+}
+
+/* Nunca ponemos display: flex directamente en dialog para no romper su estado cerrado */
+.movie-dialog {
+  width: min(820px, calc(100vw - 2rem));
+  max-height: min(90dvh, 860px);
+  padding: 0;
+  border: 2px solid color-mix(in srgb, var(--mood-accent) 35%, var(--border-soft));
+  border-radius: 28px;
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  box-shadow: 0 28px 64px rgba(45, 35, 32, 0.28);
+  overflow: auto;
+}
+
+.movie-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-dialog-surface {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.6rem 1.75rem;
+}
+
+.movie-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1.5px solid var(--border-soft);
+}
+
+.movie-dialog-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.movie-dialog-title {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.8vw, 1.8rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-main);
+}
+
+.movie-dialog-close {
+  flex-shrink: 0;
+  inline-size: 2.4rem;
+  block-size: 2.4rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-soft);
+  background-color: #ffffff;
+  color: var(--text-main);
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+}
+
+.movie-dialog-close:hover {
+  border-color: var(--mood-accent);
+  background-color: var(--mood-accent-soft);
+  transform: scale(1.05);
+}
+
+.movie-dialog-close:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 2px;
+}
+
+.movie-dialog-status {
+  padding: 1rem 1.15rem;
+  border-radius: 16px;
+  background-color: #fff6db;
+  border: 1.5px solid #f7cf6b;
+  color: #5c4300;
+  font-weight: 700;
+  font-size: 0.94rem;
+  text-align: center;
+}
+
+.movie-dialog-status.is-error {
+  background-color: #fff3f3;
+  border-color: #ffc2c2;
+  color: #8c1d28;
+}
+
+.movie-dialog-status[hidden] {
+  display: none;
+}
+
+.movie-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.movie-dialog-body[hidden] {
+  display: none;
+}
+
+.movie-dialog-hero {
+  display: grid;
+  grid-template-columns: 185px minmax(0, 1fr);
+  gap: 1.35rem;
+  align-items: start;
+}
+
+.movie-dialog-poster-wrap img {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 18px;
+  box-shadow: 0 12px 26px rgba(85, 55, 38, 0.14);
+  background-color: #f7ede2;
+}
+
+.movie-dialog-poster-fallback {
+  aspect-ratio: 2 / 3;
+  border-radius: 18px;
+  background: linear-gradient(145deg, var(--mood-bg-1), var(--mood-bg-2));
+  border: 1.5px dashed var(--border-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  gap: 0.45rem;
+}
+
+.movie-dialog-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.movie-dialog-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.movie-dialog-tagline {
+  margin: 0;
+  font-size: 0.96rem;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--mood-accent);
+}
+
+.movie-dialog-overview {
+  margin: 0;
+  font-size: 0.97rem;
+  line-height: 1.62;
+  color: var(--text-main);
+  background-color: #ffffff;
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  padding: 0.95rem 1.1rem;
+}
+
+.movie-dialog-section {
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-soft);
+  border-radius: 20px;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.movie-dialog-section-title {
+  margin: 0;
+  font-size: 1.04rem;
+  font-weight: 800;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.dialog-country-tag {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+
+/* Plataformas de streaming (TMDB / JustWatch) */
+.providers-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.provider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.provider-group-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-soft);
+}
+
+.provider-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.provider-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem 0.35rem 0.4rem;
+  border-radius: 999px;
+  background-color: #fffaf4;
+  border: 1.5px solid var(--border-soft);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.provider-pill-link {
+  text-decoration: none;
+  transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+}
+
+.provider-pill-link:hover {
+  border-color: var(--mood-accent);
+  background-color: var(--mood-accent-soft);
+  transform: translateY(-1px);
+}
+
+.provider-pill-link:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 2px;
+}
+
+.provider-logo {
+  inline-size: 26px;
+  block-size: 26px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.providers-empty,
+.trailer-empty {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--text-soft);
+}
+
+.providers-justwatch-link {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--mood-accent);
+  align-self: flex-start;
+}
+
+/* Tráiler embebido en formato 16:9 */
+.dialog-trailer-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.trailer-frame-wrap {
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #1f1917;
+  border: 1px solid var(--border-soft);
+}
+
+.trailer-frame {
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+  display: block;
+}
+
+.movie-dialog-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  padding-top: 0.9rem;
+  border-top: 1.5px solid var(--border-soft);
+}
+
+.dialog-close-form-footer {
+  margin-inline-start: auto;
+}
+
+/* Estado visual del botón "📤 Compartir plan" tras copiar o si falla (Fase 11) */
+#dialog-share-btn[data-copied] {
+  border-color: light-dark(#2e7d52, #6ee7a8);
+  background: light-dark(#e9f8ef, #1d3529);
+  color: light-dark(#1b5e3a, #b8f5d2);
+}
+
+#dialog-share-btn[data-failed] {
+  border-color: light-dark(#c84b31, #f58a76);
+  background: light-dark(#fdeee9, #3b201c);
+  color: light-dark(#9a2f1a, #ffd0c7);
+}
+
+/* ==========================================================================
+   ZONA 8: TOQUES MÁGICOS (FILTROS), MI BOTIQUÍN Y TOASTS (FASE 5)
+   ==========================================================================
+   Aquí puedes cambiar los colores de las pastillas de filtros opcionales,
+   el botón de favoritos ("Mi Botiquín") y las notificaciones flotantes.
+   ========================================================================== */
+.magic-filters-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.15rem;
+  padding: 1.25rem;
+  border-radius: 20px;
+  background-color: #faf6ff;
+  border: 1.5px solid #dfd0ff;
+}
+
+/* Versión dentro de la ventana modal de Filtros opcionales (Fase 9) */
+.magic-filters-dialog {
+  max-width: 680px;
+}
+
+.magic-filters-modal-box,
+:root[data-theme="dark"] .magic-filters-modal-box {
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+}
+
+.magic-filters-dialog-footer {
+  justify-content: flex-end;
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background-color: var(--bg-base);
+  margin-inline: -1.75rem;
+  margin-bottom: -1.6rem;
+  padding: 0.9rem 1.75rem 1.2rem;
+}
+
+.magic-filters-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.magic-filters-title {
+  margin: 0;
+  font-size: 1.04rem;
+  font-weight: 800;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.magic-filters-optional {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+
+.magic-filters-desc {
+  margin: 0.2rem 0 0;
+  font-size: 0.88rem;
+  color: var(--text-soft);
+}
+
+.magic-filters-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.active-filters-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.22rem 0.65rem;
+  border-radius: 999px;
+  background-color: #ede4ff;
+  color: #5b21b6;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.active-filters-badge[hidden] {
+  display: none;
+}
+
+.magic-filters-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+}
+
+.filter-fieldset {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  border: 1px solid #e4d8fa;
+  background-color: #ffffff;
+}
+
+.filter-legend {
+  padding-inline: 0.35rem;
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.filter-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.45rem;
+}
+
+.filter-chip-item {
+  position: relative;
+  display: inline-flex;
+}
+
+.filter-chip-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 44px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: 1.5px solid #decbb8;
+  background-color: #fffaf4;
+  color: var(--text-main);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.15s ease;
+}
+
+.filter-chip-label:hover {
+  border-color: var(--mood-accent);
+  background-color: var(--mood-accent-soft);
+}
+
+.filter-chip-item input:checked + .filter-chip-label {
+  background-color: var(--mood-accent);
+  border-color: var(--mood-accent);
+  color: var(--on-accent);
+  box-shadow: 0 5px 12px color-mix(in srgb, var(--mood-accent) 26%, transparent);
+}
+
+.filter-chip-item input:focus-visible + .filter-chip-label {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 2px;
+}
+
+/* Botón de Guardar en Mi Botiquín (en tarjetas de película y en el modal) */
+.btn-favorite {
+  inline-size: 100%;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.55rem 0.85rem;
+  border-radius: 12px;
+  border: 1.5px solid #f5bfd0;
+  background-color: #fff5f8;
+  color: #9f1239;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.btn-favorite:hover {
+  background-color: #ffe4ec;
+  border-color: #e11d48;
+  transform: translateY(-1px);
+}
+
+.btn-favorite[aria-pressed="true"] {
+  background-color: #e11d48;
+  border-color: #e11d48;
+  color: #ffffff;
+}
+
+.btn-favorite:focus-visible {
+  outline: 3px solid #e11d48;
+  outline-offset: 2px;
+}
+
+#dialog-favorite-btn[aria-pressed="true"] {
+  background-color: #e11d48;
+  border-color: #e11d48;
+  color: #ffffff;
+}
+
+/* Sección dedicada: Mi Botiquín de Películas */
+.botiquin-section {
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 241, 246, 0.9) 100%);
+  backdrop-filter: blur(8px);
+  border: 2px solid #f5bfd0;
+  border-radius: 28px;
+  padding: 2rem;
+  box-shadow: 0 18px 40px rgba(159, 18, 57, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.botiquin-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.botiquin-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+#botiquin-heading {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.8vw, 1.85rem);
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+#botiquin-heading:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 4px;
+  border-radius: 10px;
+}
+
+#botiquin-heading:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.botiquin-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.45rem;
+  padding: 1.5rem 1.25rem;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border: 1.5px dashed #f5bfd0;
+  color: var(--text-soft);
+}
+
+.botiquin-empty[hidden],
+#botiquin-grid[hidden] {
+  display: none;
+}
+
+.botiquin-empty-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.botiquin-empty p {
+  margin: 0;
+  max-width: 56ch;
+  font-size: 0.95rem;
+}
+
+.botiquin-bridge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  align-self: flex-start;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  background-color: #fff0f4;
+  border: 1px solid #f5bfd0;
+  color: #9f1239;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+/* Notificaciones Toast accesibles con popover="manual" */
+.toast-region {
+  position: fixed;
+  inset-block-end: 1.25rem;
+  inset-inline-end: 1.25rem;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-inline-size: min(360px, calc(100vw - 2rem));
+  pointer-events: none;
+}
+
+.toast-item {
+  position: fixed;
+  inset: auto 1.25rem 1.25rem auto;
+  margin: 0;
+  max-inline-size: min(360px, calc(100vw - 2rem));
+  padding: 0.85rem 1rem;
+  border-radius: 18px;
+  border: 1.5px solid #f5bfd0;
+  background-color: #2d2320;
+  color: #fff8f0;
+  box-shadow: 0 16px 36px rgba(45, 35, 32, 0.25);
+  pointer-events: auto;
+  opacity: 0;
+  translate: 0 12px;
+  transition:
+    display 0.25s,
+    overlay 0.25s,
+    opacity 0.25s ease,
+    translate 0.25s ease;
+  transition-behavior: allow-discrete;
+}
+
+.toast-item:is(:popover-open, .\:popover-open) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  opacity: 1;
+  translate: 0 0;
+}
+
+@starting-style {
+  .toast-item:is(:popover-open, .\:popover-open) {
+    opacity: 0;
+    translate: 0 12px;
+  }
+}
+
+.toast-text {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.toast-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+/* Botón «Deshacer» dentro del toast (puedes cambiar el color aquí) */
+.toast-action-btn {
+  padding: 0.35rem 0.75rem;
+  min-block-size: 2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 216, 190, 0.7);
+  background-color: #ffd8be;
+  color: #2d2320;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.toast-action-btn:hover {
+  background-color: #ffcaa6;
+  transform: translateY(-1px);
+}
+
+.toast-action-btn:focus-visible {
+  outline: 2px solid #ffd8be;
+  outline-offset: 2px;
+}
+
+.toast-close-btn {
+  flex-shrink: 0;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 248, 240, 0.35);
+  background: transparent;
+  color: #fff8f0;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.toast-close-btn:hover {
+  background-color: rgba(255, 248, 240, 0.16);
+}
+
+.toast-close-btn:focus-visible {
+  outline: 2px solid #ffd8be;
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .filter-chip-label {
+    min-block-size: 48px;
+  }
+}
+
+/* La cuadrícula interna de la receta se adapta al ancho propio de la tarjeta */
+@container (min-width: 560px) {
+  .recipe-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .recipe-block-vibe {
+    grid-column: 1 / -1;
+  }
+
+  .recipe-vibe-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Ajustes para pantallas pequeñas (móvil) */
+@media (max-width: 640px) {
+  .step-section,
+  .bridge-summary,
+  .recipe-card,
+  .movies-section,
+  .botiquin-section {
+    padding: 1.25rem;
+    border-radius: 22px;
+  }
+
+  .bridge-arrow {
+    width: 100%;
+    text-align: center;
+    transform: rotate(90deg);
+  }
+
+  .movie-dialog-surface {
+    padding: 1.2rem;
+  }
+
+  .movie-dialog-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-dialog-poster-wrap {
+    max-width: 190px;
+    margin-inline: auto;
+  }
+
+  .dialog-close-form-footer {
+    margin-inline-start: 0;
+  }
+}
+
+/* ==========================================================================
+   FASE 6: ADAPTACIÓN ACOGEDORA PARA MODO CINE NOCTURNO ("SOFÁ Y MANTA")
+   ==========================================================================
+   Todas estas reglas usan light-dark(color-día, color-noche) para que cada
+   tarjeta, botón, filtro y ficha de cine conserve la calidez en modo noche
+   sin recurrir a negros puros agresivos.
+   ========================================================================== */
+.brand-badge {
+  background-color: light-dark(#ffffff, #2d2420);
+  box-shadow: 0 6px 18px light-dark(rgba(120, 74, 48, 0.07), rgba(0, 0, 0, 0.3));
+}
+
+.botiquin-nav-pill {
+  background-color: light-dark(#fff0f4, #3a232b);
+  border-color: light-dark(#f5bfd0, #6d3b4d);
+  color: light-dark(#9f1239, #fda4af);
+}
+
+.botiquin-nav-pill:hover {
+  border-color: light-dark(#e11d48, #fb7185);
+  background-color: light-dark(#ffe4ec, #4a2a35);
+}
+
+.step-pill {
+  background-color: light-dark(#fff0e6, #382a23);
+}
+
+.step-pill-warm {
+  background-color: light-dark(#eef7ff, #23303d);
+  color: light-dark(#2c7be5, #93c5fd);
+}
+
+/* Tarjetas de emociones en modo luz tenue (cálidas y relajantes) */
+.card-peach {
+  background-color: light-dark(#fff1e6, #342620);
+  border-color: light-dark(#f9dcc4, #594136);
+}
+
+.card-coral {
+  background-color: light-dark(#ffeef0, #362326);
+  border-color: light-dark(#f8c8ce, #5d3b41);
+}
+
+.card-sky {
+  background-color: light-dark(#edf6ff, #212c38);
+  border-color: light-dark(#c8e3fb, #384c61);
+}
+
+.card-mint {
+  background-color: light-dark(#edfbf3, #20312a);
+  border-color: light-dark(#c3edd6, #365447);
+}
+
+.card-honey {
+  background-color: light-dark(#fff9e2, #342d1e);
+  border-color: light-dark(#f7e1a0, #5b4e33);
+}
+
+.card-lavender {
+  background-color: light-dark(#f5f0ff, #2c2538);
+  border-color: light-dark(#ddd0fb, #4d4063);
+}
+
+.emotion-card[aria-pressed="true"] {
+  background-color: light-dark(#ffffff, #382e2a);
+}
+
+/* Superficies principales y resumen del puente */
+.step-section,
+.bridge-summary,
+.recipe-card,
+.movies-section,
+.botiquin-section {
+  background-image: none;
+  background-color: var(--surface-card);
+  background-color: light-dark(rgba(255, 255, 255, 0.94), rgba(25, 22, 34, 0.96));
+  border-color: var(--border-soft);
+  box-shadow: 0 18px 40px light-dark(rgba(120, 74, 48, 0.08), rgba(0, 0, 0, 0.55));
+}
+
+/* Respaldo explícito para navegadores móviles sin soporte de light-dark() */
+:root[data-theme="dark"] .brand-badge,
+:root[data-theme="dark"] .theme-toggle-pill,
+:root[data-theme="dark"] .media-type-switcher {
+  background-color: #191622;
+  border-color: #353045;
+  color: #f7f1e8;
+}
+
+:root[data-theme="dark"] .step-section,
+:root[data-theme="dark"] .bridge-summary,
+:root[data-theme="dark"] .recipe-card,
+:root[data-theme="dark"] .movies-section,
+:root[data-theme="dark"] .botiquin-section {
+  background-color: rgba(25, 22, 34, 0.96);
+  border-color: #353045;
+}
+
+:root[data-theme="dark"] .emotion-card,
+:root[data-theme="dark"] .bridge-capsule,
+:root[data-theme="dark"] .bridge-message,
+:root[data-theme="dark"] .movie-card,
+:root[data-theme="dark"] .recipe-block,
+:root[data-theme="dark"] .magic-filters-box,
+:root[data-theme="dark"] .filter-fieldset,
+:root[data-theme="dark"] .tmdb-key-box,
+:root[data-theme="dark"] .botiquin-empty {
+  background-color: #231f2e;
+  border-color: #3a344c;
+  color: #f7f1e8;
+}
+
+:root[data-theme="dark"] .btn-secondary,
+:root[data-theme="dark"] .filter-chip-label {
+  background-color: #262233;
+  border-color: #3f3952;
+  color: #f7f1e8;
+}
+
+:root[data-theme="dark"] .movie-dialog-surface {
+  background-color: #171420;
+  color: #f7f1e8;
+}
+
+.bridge-message {
+  background-color: light-dark(rgba(255, 255, 255, 0.85), rgba(49, 40, 36, 0.92));
+  color: var(--text-main);
+}
+
+.bridge-capsule {
+  background-color: light-dark(#ffffff, #312824);
+}
+
+.bridge-capsule.is-empty {
+  background-color: light-dark(#fffaf5, #2a221f);
+}
+
+.btn-secondary {
+  background-color: light-dark(#ffffff, #332925);
+  color: var(--text-main);
+  border-color: var(--border-soft);
+}
+
+.btn-secondary:hover {
+  background-color: light-dark(#fff5ec, #3e322d);
+}
+
+/* Bloques de la receta y Toques Mágicos */
+.recipe-block {
+  background-color: light-dark(#fffaf5, #2f2622);
+}
+
+.recipe-block-include {
+  background-color: light-dark(#f4fcf7, #223029);
+  border-color: light-dark(#cdebd9, #365244);
+}
+
+.recipe-block-exclude {
+  background-color: light-dark(#fff5f5, #342426);
+  border-color: light-dark(#f6d2d5, #573a3f);
+}
+
+.recipe-block-vibe {
+  background-color: light-dark(#fffaf0, #312921);
+  border-color: light-dark(#f2e2c2, #524535);
+}
+
+.vibe-item {
+  background-color: light-dark(#ffffff, #28211d);
+  border-color: light-dark(#eedfd0, #4a3c35);
+}
+
+.recipe-explanation {
+  background-color: light-dark(rgba(255, 255, 255, 0.78), #28211d);
+  border-color: light-dark(#eedfd0, #4a3c35);
+  color: var(--text-main);
+}
+
+.recipe-adjustment-badge {
+  background-color: light-dark(#fff0e6, #3a2b24);
+  border-color: light-dark(#f3d2be, #5c4338);
+  color: var(--mood-accent);
+}
+
+.rating-reset-btn {
+  background-color: light-dark(#ffffff, #362c28);
+  border-color: var(--border-soft);
+  color: var(--text-main);
+}
+
+.genre-pill {
+  background-color: light-dark(#ffffff, #352b27);
+  color: var(--text-main);
+}
+
+.magic-filters-box {
+  background-color: light-dark(#fffaf5, #2e2521);
+  border-color: var(--border-soft);
+}
+
+.filter-fieldset {
+  background-color: light-dark(#ffffff, #261f1c);
+  border-color: light-dark(#eedfd0, #473932);
+}
+
+.filter-legend {
+  color: var(--text-main);
+}
+
+.filter-chip-label {
+  background-color: light-dark(#ffffff, #362c28);
+  border-color: var(--border-soft);
+  color: var(--text-main);
+}
+
+.filter-chip-label:hover {
+  background-color: light-dark(#fff3ea, #423530);
+}
+
+/* Caja de API Key de TMDB y cartelera */
+.tmdb-key-box {
+  background-color: light-dark(#fffaf5, #2e2521);
+}
+
+.tmdb-key-box.is-configured {
+  background-color: light-dark(#f2fbf6, #213029);
+  border-color: light-dark(#bfe6cf, #385847);
+}
+
+.tmdb-key-input {
+  background-color: light-dark(#ffffff, #221c19);
+  color: var(--text-main);
+}
+
+.tmdb-help-details {
+  background-color: light-dark(#ffffff, #261f1c);
+}
+
+.movie-card {
+  background-color: light-dark(#ffffff, #2c2420);
+  box-shadow: 0 12px 26px light-dark(rgba(120, 74, 48, 0.08), rgba(0, 0, 0, 0.36));
+}
+
+.movie-poster-fallback,
+.movie-dialog-poster-fallback {
+  background: light-dark(
+    linear-gradient(145deg, #fff0e6, #f8e4d4),
+    linear-gradient(145deg, #352a25, #261e1b)
+  );
+}
+
+.watched-drawer,
+.botiquin-empty {
+  background-color: light-dark(#fffaf5, #2d2420);
+}
+
+/* Ventana modal de detalles (<dialog>) en modo cine nocturno */
+.movie-dialog::backdrop {
+  background-color: light-dark(rgba(45, 35, 32, 0.56), rgba(10, 7, 6, 0.78));
+}
+
+.movie-dialog-surface {
+  background-color: light-dark(#fffaf5, #241d1a);
+  color: var(--text-main);
+}
+
+.movie-dialog-close {
+  background-color: light-dark(#ffffff, #352b27);
+  color: var(--text-main);
+}
+
+.movie-dialog-section,
+.movie-dialog-overview {
+  background-color: light-dark(#ffffff, #2d2420);
+  color: var(--text-main);
+}
+
+.movie-dialog-status,
+.movies-feedback,
+.phase3-notice {
+  background-color: light-dark(#fff6db, #352c1f);
+  border-color: light-dark(#f2da96, #5e4f34);
+  color: var(--text-main);
+}
+
+.movie-dialog-status.is-error,
+.movies-feedback.is-error {
+  background-color: light-dark(#fff3f3, #3a2326);
+  border-color: light-dark(#ffc2c2, #6b3b42);
+  color: light-dark(#8c1d28, #ffb4bc);
+}
+
+.movie-year-badge {
+  background-color: light-dark(#f7efe6, #382e29);
+  color: var(--text-soft);
+}
+
+.movie-score-badge,
+.movie-rating-pill {
+  background-color: light-dark(#fff3c4, #3d311d);
+  border-color: light-dark(#f7d97e, #66512c);
+  color: light-dark(#7c4a03, #f8d47c);
+}
+
+.btn-watched {
+  background-color: light-dark(#fffaf4, #352b27);
+  border-color: var(--border-soft);
+  color: var(--text-main);
+}
+
+.btn-watched:hover {
+  background-color: var(--mood-accent-soft);
+  border-color: var(--mood-accent);
+  color: var(--mood-accent);
+}
+
+.btn-favorite {
+  background-color: light-dark(#fff5f8, #3b242c);
+  border-color: light-dark(#f5bfd0, #6d3b4d);
+  color: light-dark(#9f1239, #fda4af);
+}
+
+.btn-favorite:hover {
+  background-color: light-dark(#ffe4ec, #4c2c37);
+  border-color: light-dark(#e11d48, #fb7185);
+}
+
+.btn-favorite[aria-pressed="true"] {
+  background-color: #e11d48;
+  border-color: #e11d48;
+  color: #ffffff;
+}
+
+.movie-meta-pill,
+.watched-item,
+.botiquin-mood-tag {
+  background-color: light-dark(#fffaf4, #332925);
+  color: var(--text-main);
+}
+
+.provider-pill {
+  background-color: light-dark(#fffaf5, #362c28);
+  color: var(--text-main);
+}
+
+/* Notificaciones toast */
+.toast-item {
+  background-color: light-dark(#2d2320, #f4e6d8);
+  color: light-dark(#fff8f0, #1f1917);
+}
+
+.toast-close-btn {
+  color: inherit;
+  border-color: currentColor;
+}
+
+/* ==========================================================================
+   FASE 7: SELECTOR PELÍCULAS / SERIES / TODO Y ETIQUETAS DE FORMATO
+   ========================================================================== */
+.media-type-switcher {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  margin: 1.35rem auto 0;
+  padding: 0.35rem;
+  border-radius: 999px;
+  border: 1.5px solid light-dark(#eedfd0, #4d3e36);
+  background-color: light-dark(rgba(255, 255, 255, 0.92), rgba(45, 36, 32, 0.94));
+  box-shadow: 0 10px 24px light-dark(rgba(120, 74, 48, 0.08), rgba(0, 0, 0, 0.35));
+}
+
+.media-type-option {
+  position: relative;
+  display: inline-flex;
+}
+
+.media-type-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-block-size: 44px;
+  padding: 0.45rem 1.15rem;
+  border-radius: 999px;
+  font-size: 0.94rem;
+  font-weight: 800;
+  color: var(--text-soft);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.media-type-label:hover {
+  color: var(--text-main);
+  background-color: light-dark(#fff3ea, #3a2e29);
+}
+
+.media-type-option input:checked + .media-type-label {
+  background-color: var(--mood-accent);
+  color: var(--on-accent);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--mood-accent) 30%, transparent);
+}
+
+.media-type-option input:focus-visible + .media-type-label {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .media-type-label {
+    min-block-size: 48px;
+  }
+}
+
+/* Insignias de formato (🎬 Película / 📺 Serie) y temporadas/episodios */
+.media-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.media-type-movie {
+  background-color: light-dark(#fff0e6, #3d2c24);
+  border: 1px solid light-dark(#f5cdb4, #634638);
+  color: light-dark(#b84b2c, #f6ad87);
+}
+
+.media-type-tv {
+  background-color: light-dark(#eef2ff, #262940);
+  border: 1px solid light-dark(#c7d2fe, #434a73);
+  color: light-dark(#3730a3, #a5b4fc);
+}
+
+.tv-seasons-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  align-self: flex-start;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  background-color: light-dark(#eef2ff, #262940);
+  border: 1px solid light-dark(#c7d2fe, #434a73);
+  color: light-dark(#3730a3, #c7d2fe);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   FASE 8: VERSIÓN MÓVIL (RESPONSIVE, SAFE AREA Y USO CON UNA SOLA MANO)
+   ==========================================================================
+   Ajusta cabecera, selector de formato, tarjetas de emociones, Toques Mágicos,
+   barra de API Key, cartelera, Botiquín y ventana modal para pantallas móviles
+   (360px–430px) respetando el alto dinámico (dvh) y las zonas seguras.
+   ========================================================================== */
+.movie-dialog {
+  max-block-size: calc(100dvh - 2rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+}
+
+.toast-region {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (max-width: 600px) {
+  .page-shell {
+    width: min(100%, 100% - 1.25rem);
+    padding-top: max(1.25rem, calc(0.75rem + env(safe-area-inset-top, 0px)));
+    padding-bottom: max(2.5rem, calc(1.5rem + env(safe-area-inset-bottom, 0px)));
+  }
+
+  .hero {
+    margin-bottom: 1.75rem;
+  }
+
+  /* Barra superior ordenada: insignia arriba y botones de Botiquín + Modo noche lado a lado */
+  .hero-top-bar {
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .brand-badge {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.84rem;
+    padding: 0.42rem 0.85rem;
+  }
+
+  .filters-nav-pill {
+    flex: 1 1 100%;
+    justify-content: center;
+    min-block-size: 44px;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.86rem;
+  }
+
+  .botiquin-nav-pill,
+  .theme-toggle-pill {
+    flex: 1 1 0;
+    justify-content: center;
+    min-block-size: 44px;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.98rem;
+    margin-top: 0.55rem;
+  }
+
+  /* Selector Películas / Series / Todo en 3 columnas iguales sin desbordar */
+  .media-type-switcher {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    max-width: 100%;
+    gap: 0.25rem;
+    padding: 0.3rem;
+    margin-top: 1.1rem;
+  }
+
+  .media-type-option {
+    width: 100%;
+  }
+
+  .media-type-label {
+    width: 100%;
+    padding: 0.45rem 0.4rem;
+    font-size: 0.86rem;
+    min-block-size: 44px;
+    white-space: nowrap;
+  }
+
+  .planner {
+    gap: 1.5rem;
+  }
+
+  .step-section,
+  .bridge-summary,
+  .recipe-card,
+  .movies-section,
+  .botiquin-section {
+    padding: 1.05rem;
+    border-radius: 20px;
+  }
+
+  /* Cuadrícula de emociones en 2 columnas cómodas para el pulgar */
+  .emotion-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+
+  .emotion-card {
+    padding: 0.95rem 0.8rem;
+    border-radius: 18px;
+    gap: 0.3rem;
+  }
+
+  .card-emoji {
+    font-size: 1.65rem;
+  }
+
+  .card-title {
+    font-size: 0.95rem;
+    line-height: 1.25;
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    line-height: 1.35;
+  }
+
+  /* Botones de acción principales a ancho completo para usar con una mano */
+  .bridge-actions,
+  .recipe-actions,
+  .movies-batch-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bridge-actions > button,
+  .recipe-actions > button,
+  .movies-batch-actions > button {
+    width: 100%;
+    justify-content: center;
+    min-block-size: 48px;
+  }
+
+  /* Toques Mágicos cómodos para tocar con el dedo */
+  .magic-filters-box {
+    padding: 0.95rem;
+  }
+
+  .magic-filters-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .filter-chip-label {
+    min-block-size: 42px;
+    padding: 0.42rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  /* Caja de API Key de TMDB sin desbordamientos */
+  .tmdb-key-box {
+    padding: 0.95rem;
+  }
+
+  .tmdb-key-input-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tmdb-key-input {
+    width: 100%;
+    min-inline-size: 0;
+    min-block-size: 46px;
+    font-size: 1rem; /* Evita zoom automático en iOS Safari */
+  }
+
+  .tmdb-key-input-row > button {
+    width: 100%;
+    justify-content: center;
+    min-block-size: 44px;
+  }
+
+  /* Cabecera de Mi Botiquín y cartelera en móvil */
+  .botiquin-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .movies-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Ventana modal (<dialog>) cómoda con una mano y respetando dvh + safe-area */
+  .movie-dialog {
+    width: calc(100% - 1rem);
+    max-width: 100%;
+    max-block-size: calc(100dvh - 1rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    border-radius: 22px;
+    margin: auto;
+  }
+
+  .movie-dialog-surface {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .movie-dialog-header {
+    gap: 0.65rem;
+  }
+
+  .movie-dialog-close {
+    min-block-size: 44px;
+    min-inline-size: 44px;
+  }
+
+  .dialog-trailer-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .movie-dialog-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.55rem;
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .magic-filters-dialog-footer {
+    margin-inline: -1rem;
+    margin-bottom: -1rem;
+    padding: 0.8rem 1rem max(0.9rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .movie-dialog-footer > button,
+  .dialog-close-form-footer,
+  .dialog-close-form-footer > button {
+    width: 100%;
+    justify-content: center;
+    min-block-size: 46px;
+  }
+}
+
+/* Pantallas muy estrechas (< 360px): 1 columna para que nada se apriete */
+@media (max-width: 359px) {
+  .emotion-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .media-type-label {
+    font-size: 0.8rem;
+  }
+}
+
+/* Respeto por usuarios que prefieren reducir animaciones */
+@media (prefers-reduced-motion: reduce) {
+  .emotion-card:hover,
+  .emotion-card[aria-pressed="true"],
+  .movie-card:hover,
+  .btn-primary:hover:not(:disabled),
+  .btn-secondary:hover {
+    transform: none;
+  }
+
+  .recipe-card {
+    translate: none;
+    transition-duration: 0.1s;
+  }
+
+  @starting-style {
+    .recipe-card {
+      translate: none;
+    }
+  }
+
+  .recipe-card:where([hidden], [data-closing]) {
+    translate: none;
+  }
+
+  .toast-item,
+  .toast-item:is(:popover-open, .\:popover-open) {
+    translate: none;
+    transition-duration: 0.05s;
+  }
+
+  @starting-style {
+    .toast-item:is(:popover-open, .\:popover-open) {
+      translate: none;
+    }
+  }
+}
+
+/* ==========================================================================
+   FASE 13: EXPERIENCIA CINE PREMIUM
+   (Esqueletos de carga animados + Reparto y dirección en la ficha modal)
+   ========================================================================== */
+
+/* Base de bloque esqueleto con brillo animado solo en compositor (transform) */
+.skeleton-block {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: #efe4d8;
+  background-color: light-dark(#efe4d8, #382e29);
+}
+
+/* Optamos por activar el brillo solo si el usuario no pidió reducir movimiento */
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton-block::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 100%
+    );
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      light-dark(rgba(255, 255, 255, 0.6), rgba(255, 240, 224, 0.12)) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+    will-change: transform;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Tarjeta esqueleto para la cartelera principal (#movies-grid) */
+.movie-card-skeleton {
+  display: flex;
+  flex-direction: column;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1.5px solid var(--border-soft);
+  background-color: #ffffff;
+  background-color: light-dark(#ffffff, #2c2420);
+  box-shadow: 0 12px 26px rgba(120, 74, 48, 0.08);
+  box-shadow: 0 12px 26px light-dark(rgba(120, 74, 48, 0.08), rgba(0, 0, 0, 0.36));
+  pointer-events: none;
+}
+
+.skeleton-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 0;
+}
+
+.skeleton-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1rem 1.05rem 1.15rem;
+}
+
+.skeleton-title {
+  height: 1.25rem;
+  width: 78%;
+}
+
+.skeleton-meta-row {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.skeleton-pill {
+  height: 1.55rem;
+  width: 4.5rem;
+  border-radius: 999px;
+}
+
+.skeleton-pill-wide {
+  width: 6.2rem;
+}
+
+.skeleton-line {
+  height: 0.85rem;
+  width: 100%;
+}
+
+.skeleton-line-short {
+  width: 66%;
+}
+
+.skeleton-btn {
+  margin-top: 0.35rem;
+  height: 2.6rem;
+  width: 100%;
+  border-radius: 999px;
+}
+
+/* Esqueletos compactos dentro de la ficha modal */
+.skeleton-providers-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.skeleton-trailer-box {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+}
+
+.skeleton-cast-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.65rem;
+}
+
+.skeleton-cast-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 14px;
+  border: 1px solid var(--border-soft);
+  background-color: #fffaf5;
+  background-color: light-dark(#fffaf5, #362c28);
+}
+
+.skeleton-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeleton-cast-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+/* --------------------------------------------------------------------------
+   BLOQUE DE REPARTO Y DIRECCIÓN EN LA FICHA MODAL (credits de TMDB)
+   -------------------------------------------------------------------------- */
+.credits-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.credits-director-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 14px;
+  border: 1px solid var(--border-soft);
+  background-color: #fffaf5;
+  background-color: light-dark(#fffaf5, #352b27);
+  font-size: 0.92rem;
+  color: var(--text-main);
+}
+
+.credits-director-label {
+  font-weight: 700;
+  color: var(--mood-accent);
+}
+
+.credits-director-names {
+  font-weight: 600;
+}
+
+.credits-cast-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  gap: 0.65rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cast-card {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 14px;
+  border: 1px solid var(--border-soft);
+  background-color: #fffaf5;
+  background-color: light-dark(#fffaf5, #352b27);
+  min-width: 0;
+}
+
+.cast-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border-soft);
+  background-color: #f4e6d8;
+  background-color: light-dark(#f4e6d8, #28201d);
+}
+
+.cast-avatar-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--mood-accent);
+}
+
+.cast-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cast-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cast-character {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 520px) {
+  .credits-cast-grid,
+  .skeleton-cast-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ==========================================================================
+   FASE 15: BOTÓN «🎲 SORPRÉNDEME HOY» (1 CLIC EN CABECERA)
+   ========================================================================== */
+.hero-surprise-wrap {
+  margin-top: 1.05rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+/* AQUÍ PUEDES PERSONALIZAR EL ASPECTO DEL BOTÓN SORPRESA */
+.surprise-today-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-block-size: 46px;
+  padding: 0.65rem 1.45rem;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--mood-accent);
+  color: var(--on-accent);
+  font-family: inherit;
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--mood-accent) 32%, transparent);
+  transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease, background-color 0.25s ease;
+}
+
+.surprise-today-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+  box-shadow: 0 14px 28px color-mix(in srgb, var(--mood-accent) 38%, transparent);
+}
+
+.surprise-today-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.surprise-today-btn:focus-visible {
+  outline: 3px solid var(--mood-accent);
+  outline-offset: 3px;
+}
+
+.surprise-today-btn:disabled {
+  opacity: 0.72;
+  cursor: wait;
+}
+
+.surprise-dice {
+  display: inline-block;
+  font-size: 1.15rem;
+  transition: transform 0.3s ease;
+}
+
+.surprise-today-btn:hover:not(:disabled) .surprise-dice {
+  transform: rotate(22deg) scale(1.1);
+}
+
+.surprise-today-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  max-width: 44ch;
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .hero-surprise-wrap {
+    width: 100%;
+  }
+
+  .surprise-today-btn {
+    width: 100%;
+    min-block-size: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surprise-today-btn,
+  .surprise-dice {
+    transition: none;
+  }
+
+  .surprise-today-btn:hover:not(:disabled),
+  .surprise-today-btn:active:not(:disabled),
+  .surprise-today-btn:hover:not(:disabled) .surprise-dice {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   FASE 16: PANEL MODAL «💊 MI BOTIQUÍN»
+   ========================================================================== */
+/* Ancho cómodo en escritorio para mostrar varias tarjetas a la vez */
+.botiquin-dialog {
+  width: min(980px, calc(100vw - 2rem));
+  max-width: 980px;
+}
+
+.botiquin-dialog-topline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.botiquin-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.botiquin-dialog-subtitle {
+  margin: 0;
+}
+
+.botiquin-dialog-grid {
+  margin-top: 0;
+}
+
+/* Pie fijo para que "Vaciar botiquín" y "Cerrar" estén siempre accesibles */
+.botiquin-dialog-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  background-color: var(--bg-card);
+  border-top: 1px solid var(--border-soft);
+}
+
+@media (max-width: 640px) {
+  .botiquin-dialog {
+    width: calc(100% - 1rem);
+    max-width: 100%;
+  }
+
+  .botiquin-dialog-footer {
+    justify-content: stretch;
+  }
+
+  .botiquin-dialog-footer > button {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-block-size: 44px;
+  }
+}

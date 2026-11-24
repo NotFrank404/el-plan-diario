@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <!-- viewport-fit=cover permite aprovechar toda la pantalla en móviles con muesca (notch) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- Declaramos soporte para modo día y modo cine nocturno -->
+  <meta name="color-scheme" content="light dark" />
+  <!-- Color de la barra superior del navegador móvil en modo día y modo noche -->
+  <meta name="theme-color" id="meta-theme-color" content="#fff8f0" />
+  <!-- Toque de App al pulsar "Añadir a pantalla de inicio" en iPhone y Android -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="El Plan Diario" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <!-- Evita parpadeos de color al cargar si ya elegiste Modo noche o Modo día -->
+  <script>
+    try {
+      var savedScheme = localStorage.getItem("color-scheme");
+      var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var activeScheme = savedScheme === "dark" || savedScheme === "light" ? savedScheme : (prefersDark ? "dark" : "light");
+      document.querySelector('meta[name="color-scheme"]').content = savedScheme || "light dark";
+      if (savedScheme === "dark" || savedScheme === "light") {
+        document.documentElement.dataset.theme = savedScheme;
+      }
+      var metaTheme = document.getElementById("meta-theme-color");
+      if (metaTheme) {
+        metaTheme.content = activeScheme === "dark" ? "#0f0d15" : "#fff8f0";
+      }
+    } catch (e) {}
+  </script>
+  <!-- AQUÍ PUEDES CAMBIAR EL NOMBRE QUE APARECE EN LA PESTAÑA DEL NAVEGADOR -->
+  <title>El Plan Diario — Cine y series según cómo late tu día</title>
+  <!-- Metaetiquetas básicas de SEO y vista previa al compartir por WhatsApp o redes sociales -->
+  <meta
+    name="description"
+    content="Descubre qué película o serie ver hoy según cómo te sientes y cómo quieres sentirte al terminar. Tu puente emocional de cine y series con recomendaciones reales."
+  />
+  <meta property="og:title" content="El Plan Diario — Cine y series según cómo late tu día" />
+  <meta
+    property="og:description"
+    content="Dinos cómo llegas hoy y hacia dónde quieres viajar con una buena historia. Recomendaciones reales de películas y series, tráilers y dónde verlas."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://el-plan-diario.netlify.app/" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:image" content="https://el-plan-diario.netlify.app/icon.svg" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="El Plan Diario — Cine y series según cómo late tu día" />
+  <meta
+    name="twitter:description"
+    content="Dinos cómo llegas hoy y hacia dónde quieres viajar con una buena historia."
+  />
+  <!-- Conectamos este archivo HTML con el archivo de diseño (styles.css) -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Fondo decorativo suave que cambia de color según la emoción que elijas -->
+  <div class="ambient-backdrop" aria-hidden="true"></div>
+
+  <div class="page-shell">
+    <!-- ========================================== -->
+    <!-- ZONA 1: TÍTULO Y BIENVENIDA DE LA WEB      -->
+    <!-- ========================================== -->
+    <header class="hero">
+      <div class="hero-top-bar">
+        <div class="brand-badge">
+          <span aria-hidden="true">🍿</span>
+          <!-- AQUÍ PUEDES CAMBIAR LA ETIQUETA DE BIENVENIDA DE LA CABECERA -->
+          <span>Tu puente emocional de cine y series</span>
+        </div>
+
+        <!-- Botón compacto para abrir los Filtros opcionales (Toques Mágicos) en una ventana modal (Fase 9) -->
+        <button
+          type="button"
+          id="hero-filters-btn"
+          class="filters-nav-pill"
+          commandfor="magic-filters-dialog"
+          command="show-modal"
+          aria-haspopup="dialog"
+        >
+          <span aria-hidden="true">🪄</span>
+          <span>Filtros opcionales</span>
+          <span id="hero-filters-count" class="filters-count-pill" hidden>0</span>
+        </button>
+
+        <!-- Acceso rápido a tus películas guardadas en un panel modal (Fase 16) -->
+        <button
+          type="button"
+          id="hero-botiquin-btn"
+          class="botiquin-nav-pill"
+          commandfor="botiquin-dialog"
+          command="show-modal"
+          aria-haspopup="dialog"
+        >
+          <span aria-hidden="true">💊</span>
+          <span>Mi Botiquín</span>
+          <span id="hero-botiquin-count" class="botiquin-count-pill">0</span>
+        </button>
+
+        <!-- Botón compacto para alternar entre Modo día y Modo Cine Nocturno (Fase 6) -->
+        <button
+          type="button"
+          id="theme-toggle-btn"
+          class="theme-toggle-pill"
+        >
+          <span class="theme-option-dark">
+            <span aria-hidden="true">🌙</span>
+            <span>Modo noche</span>
+          </span>
+          <span class="theme-option-light">
+            <span aria-hidden="true">☀️</span>
+            <span>Modo día</span>
+          </span>
+        </button>
+      </div>
+
+      <!-- AQUÍ PUEDES CAMBIAR EL TÍTULO PRINCIPAL DE LA PÁGINA -->
+      <h1 class="hero-title">El Plan Diario</h1>
+
+      <!-- AQUÍ PUEDES CAMBIAR LA FRASE DE BIENVENIDA -->
+      <p class="hero-subtitle">
+        Tu rincón acogedor de cine y series según cómo late tu día. Dinos cómo llegas hoy
+        y hacia dónde quieres viajar con una buena historia.
+      </p>
+
+      <!-- ========================================================== -->
+      <!-- SELECTOR RÁPIDO: PELÍCULAS | SERIES | TODO (FASE 7)        -->
+      <!-- ========================================================== -->
+      <fieldset class="media-type-switcher">
+        <legend class="visually-hidden">¿Qué te apetece ver hoy?</legend>
+        <div class="media-type-option">
+          <input type="radio" id="media-movie" name="media-type" value="movie" class="visually-hidden" checked />
+          <label for="media-movie" class="media-type-label">🎬 Películas</label>
+        </div>
+        <div class="media-type-option">
+          <input type="radio" id="media-tv" name="media-type" value="tv" class="visually-hidden" />
+          <label for="media-tv" class="media-type-label">📺 Series</label>
+        </div>
+        <div class="media-type-option">
+          <input type="radio" id="media-all" name="media-type" value="all" class="visually-hidden" />
+          <label for="media-all" class="media-type-label">✨ Todo</label>
+        </div>
+      </fieldset>
+
+      <!-- ========================================================== -->
+      <!-- BOTÓN «🎲 SORPRÉNDEME HOY» EN 1 CLIC (FASE 15)             -->
+      <!-- ========================================================== -->
+      <div class="hero-surprise-wrap">
+        <button
+          type="button"
+          id="surprise-today-btn"
+          class="surprise-today-btn"
+          aria-describedby="surprise-today-hint"
+        >
+          <span class="surprise-dice" aria-hidden="true">🎲</span>
+          <!-- AQUÍ PUEDES CAMBIAR EL TEXTO DEL BOTÓN SORPRESA -->
+          <span class="surprise-label">Sorpréndeme hoy</span>
+        </button>
+        <p id="surprise-today-hint" class="surprise-today-hint">
+          ¿Sin ganas de pensar? Te elegimos un puente acogedor y abrimos 1 plan listo para ver.
+        </p>
+      </div>
+    </header>
+
+    <main class="planner">
+      <!-- ========================================== -->
+      <!-- ZONA 2: PASO 1 - ¿CÓMO TE SIENTES HOY?     -->
+      <!-- ========================================== -->
+      <section class="step-section" aria-labelledby="step-current-heading">
+        <div class="step-header">
+          <span class="step-pill">Paso 1 de 2</span>
+          <h2 id="step-current-heading">1. ¿Cómo te sientes ahora mismo?</h2>
+          <p class="step-description">
+            Elige la tarjeta que mejor describe tu punto de partida hoy.
+          </p>
+        </div>
+
+        <!-- Cuadrícula con las 6 emociones actuales -->
+        <div id="step-current" class="emotion-grid" role="group" aria-labelledby="step-current-heading">
+          <button
+            type="button"
+            class="emotion-card card-peach"
+            data-current="agotado"
+            aria-pressed="false"
+          >
+            <span class="card-emoji" aria-hidden="true">🛋️</span>
+            <span class="card-title">Agotado</span>
+            <span class="card-desc">Mi mente pide sofá, manta y cero complicaciones</span>
+          </button>
+
+          <button
+            type="button"
+            class="emotion-card card-coral"
+            data-current="estresado"
+            aria-pressed="false"
+          >
+            <span class="card-emoji" aria-hidden="true">🌪️</span>
+            <span class="card-title">Estresado</span>
+            <span class="card-desc">Mi día fue a mil por hora y necesito bajar revoluciones</span>
+          </button>
+
+          <button
+            type="button"
+            class="emotion-card card-sky"
+            data-current="melancolico"
+            aria-pressed="false"
+          >
+            <span class="card-emoji" aria-hidden="true">🌧️</span>
+            <span class="card-title">Triste o Melancólico</span>
+            <span class="card-desc">Tengo el corazón sensible y necesito compañía</span>
+          </button>
+
+          <button
+            type="button"
+            class="emotion-card card-mint"
+            data-current="aburrido"
+            aria-pressed="false"
+          >
+            <span class="card-emoji" aria-hidden="true">🥱</span>
+            <span class="card-title">Aburrido</span>
+            <span class="card-desc">Todo me parece igual hoy, busco una chispa</span>
+          </button>
+
+          <button
+            type="button"
+            class="emotion-card card-honey"
+            data-current="feliz"
+            aria-pressed="false"
+          >
+            <span class="card-emoji" aria-hidden="true">☀️</span>
+            <span class="card-title">Feliz y con energía</span>
+            <span class="card-desc">Me siento genial y quiero celebrar este buen humor</span>
+          </button>
+
+          <button
+            type="button"
+            class="emotion-card card-lavender"
+            data-current="curioso"
+            aria-pressed="false"
+          >
+            <span class="card-emoji" aria-hidden="true">🔮</span>
+            <span class="card-title">Pensativo o Curioso</span>
+            <span class="card-desc">Tengo ganas de descubrir algo diferente y especial</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- ZONA 3: PASO 2 - ¿CÓMO QUIERES SENTIRTE?   -->
+      <!-- ========================================== -->
+      <section class="step-section" aria-labelledby="step-target-heading">
+        <div class="step-header">
+          <span class="step-pill step-pill-warm">Paso 2 de 2</span>
+          <h2 id="step-target-heading">2. ¿Cómo quieres sentirte al terminar?</h2>
+          <p class="step-description">
+            Ahora elige tu destino emocional: qué sensación quieres que te deje la historia.
+          </p>
+        </div>
+
+        <!-- Cuadrícula con los 6 destinos emocionales -->
+        <div id="step-target" class="emotion-grid" role="group" aria-labelledby="step-target-heading">
+          <button
+            type="button"
+            class="emotion-card card-honey"
+            data-target="reir"
+            aria-pressed="false"
+          >
+            <span class="card-emoji" aria-hidden="true">😂</span>
+            <span class="card-title">Reír y desconectar</span>
+            <span class="card-desc">Pasar un rato divertido y olvidarme de todo</span>
+          </button>
+
+          <button
+            type="button"
+            class="emotion-card card-peach"
+            data-target="abrazo"
+            aria-pressed="false"
+          >
+            <span class="card-emoji" aria-hidden="true">☕</span>
+            <span class="card-title">Sentir un abrazo cálido</span>
+            <span class="card-desc">Historias tiernas y acogedoras que reconfortan el alma</span>
+          </button>
+
+          <button
+            type="button"
+            class="emotion-card card-sky"
+            data-target="catarsis"
+            aria-pressed="false"
+          >
+            <span class="card-emoji" aria-hidden="true">💧</span>
+            <span class="card-title">Soltar una lágrima (Catarsis)</span>
+            <span class="card-desc">Emocionarme de verdad para desahogarme a gusto</span>
+          </button>
+
+          <button
+            type="button"
+            class="emotion-card card-coral"
+            data-target="aventura"
+            aria-pressed="false"
+          >
+            <span class="card-emoji" aria-hidden="true">🚀</span>
+            <span class="card-title">Vivir una gran aventura</span>
+            <span class="card-desc">Viajar a otro mundo lleno de emoción y ritmo</span>
+          </button>
+
+          <button
+            type="button"
+            class="emotion-card card-mint"
+            data-target="inspiracion"
+            aria-pressed="false"
+          >
+            <span class="card-emoji" aria-hidden="true">✨</span>
+            <span class="card-title">Maravillarme e inspirarme</span>
+            <span class="card-desc">Quedarme con una sonrisa y ganas de comerme el mundo</span>
+          </button>
+
+          <button
+            type="button"
+            class="emotion-card card-lavender"
+            data-target="misterio"
+            aria-pressed="false"
+          >
+            <span class="card-emoji" aria-hidden="true">🧩</span>
+            <span class="card-title">Resolver un buen misterio</span>
+            <span class="card-desc">Engancharme a una trama intrigante hasta el final</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- ZONA 4: RESUMEN DEL PUENTE EMOCIONAL       -->
+      <!-- ========================================== -->
+      <section id="bridge-summary" class="bridge-summary" aria-labelledby="bridge-heading" aria-live="polite">
+        <div class="bridge-header">
+          <span class="bridge-eyebrow">Tu Puente Emocional en El Plan Diario</span>
+          <h2 id="bridge-heading">Elige tus dos sensaciones para trazar tu plan</h2>
+        </div>
+
+        <!-- Cápsulas visuales que muestran la conexión: [Cómo estoy] -> [Cómo quiero sentirme] -->
+        <div class="bridge-capsules">
+          <div id="capsule-current" class="bridge-capsule is-empty">
+            <span class="capsule-label">Hoy llegas:</span>
+            <span id="capsule-current-value" class="capsule-value">Pendiente de elegir</span>
+          </div>
+
+          <span class="bridge-arrow" aria-hidden="true">➔</span>
+
+          <div id="capsule-target" class="bridge-capsule is-empty">
+            <span class="capsule-label">Tu destino:</span>
+            <span id="capsule-target-value" class="capsule-value">Pendiente de elegir</span>
+          </div>
+        </div>
+
+        <!-- Mensaje empático que cambia automáticamente según la combinación -->
+        <p id="bridge-message" class="bridge-message">
+          Pulsa una tarjeta del <strong>Paso 1</strong> y otra del <strong>Paso 2</strong>
+          para ver cómo cambia la atmósfera de tu sala y leer tu plan emocional de hoy.
+        </p>
+
+        <!-- Botones de acción -->
+        <div class="bridge-actions">
+          <button
+            type="button"
+            id="next-phase-btn"
+            class="btn-primary"
+            aria-expanded="false"
+            aria-controls="recipe-card"
+            disabled
+          >
+            Descubrir mi receta de cine
+          </button>
+          <button type="button" id="reset-btn" class="btn-secondary" hidden>
+            Probar otra combinación
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- ZONA 5: TU RECETA DE CINE (FASE 2)         -->
+      <!-- ========================================== -->
+      <!-- Esta tarjeta traduce tus 2 emociones en géneros de cine y tono ideal -->
+      <article id="recipe-card" class="recipe-card" aria-labelledby="recipe-heading" hidden>
+        <header class="recipe-header">
+          <div class="recipe-topline">
+            <!-- AQUÍ PUEDES CAMBIAR LA ETIQUETA SUPERIOR DE LA RECETA -->
+            <span class="recipe-eyebrow">Tu Receta de Cine para Hoy</span>
+            <span id="recipe-adjustment-badge" class="recipe-adjustment-badge"></span>
+          </div>
+
+          <h2 id="recipe-heading" tabindex="-1">Tu Receta de Cine para Hoy</h2>
+          <p id="recipe-subtitle" class="recipe-subtitle"></p>
+        </header>
+
+        <div class="recipe-content">
+          <div class="recipe-grid">
+            <!-- Bloque 1: Géneros que sí encajan con cómo quieres sentirte -->
+            <div class="recipe-block recipe-block-include">
+              <!-- AQUÍ PUEDES CAMBIAR EL TÍTULO DE LOS GÉNEROS IDEALES -->
+              <h3><span aria-hidden="true">🎯</span> Géneros ideales que buscaremos</h3>
+              <ul id="recipe-include-list" class="genre-pill-list" role="list"></ul>
+            </div>
+
+            <!-- Bloque 2: Géneros que evitaremos para cuidar tu estado de ánimo -->
+            <div class="recipe-block recipe-block-exclude">
+              <!-- AQUÍ PUEDES CAMBIAR EL TÍTULO DE LOS GÉNEROS EVITADOS -->
+              <h3><span aria-hidden="true">🚫</span> Géneros que evitaremos hoy</h3>
+              <ul id="recipe-exclude-list" class="genre-pill-list" role="list"></ul>
+            </div>
+
+            <!-- Bloque 3: Ritmo, tono y nota mínima sugerida -->
+            <div class="recipe-block recipe-block-vibe">
+              <!-- AQUÍ PUEDES CAMBIAR EL TÍTULO DE RITMO Y TONO -->
+              <h3><span aria-hidden="true">✨</span> Ritmo, tono y filtro de calidad</h3>
+
+              <dl class="recipe-vibe-list">
+                <div class="vibe-item">
+                  <dt>Ritmo sugerido</dt>
+                  <dd id="recipe-pace"></dd>
+                </div>
+                <div class="vibe-item">
+                  <dt>Tono ideal</dt>
+                  <dd id="recipe-tone"></dd>
+                </div>
+                <div class="vibe-item">
+                  <dt><label for="recipe-rating-input">Nota mínima</label></dt>
+                  <dd>
+                    <div class="rating-header">
+                      <span id="recipe-rating" class="rating-value"></span>
+                      <button type="button" id="reset-rating-btn" class="rating-reset-btn" hidden>
+                        Usar sugerida
+                      </button>
+                    </div>
+                    <!-- AQUÍ PUEDES CAMBIAR EL RANGO (min, max) O EL SALTO (step) DE LA NOTA -->
+                    <input
+                      type="range"
+                      id="recipe-rating-input"
+                      class="rating-slider"
+                      min="0"
+                      max="10"
+                      step="0.1"
+                      value="7.0"
+                      aria-describedby="recipe-rating-hint"
+                    />
+                    <div class="rating-scale" aria-hidden="true">
+                      <span>0 (Vale todo)</span>
+                      <span>5</span>
+                      <span>10 (Top)</span>
+                    </div>
+                    <p id="recipe-rating-hint" class="rating-hint"></p>
+                  </dd>
+                </div>
+              </dl>
+
+              <p id="recipe-explanation" class="recipe-explanation"></p>
+            </div>
+          </div>
+        </div>
+
+        <footer class="recipe-footer">
+          <!-- ========================================================== -->
+          <!-- CONFIGURACIÓN DE CONEXIÓN A TMDB (FASE 3 - LLAVE GRATUITA) -->
+          <!-- ========================================================== -->
+          <div id="tmdb-key-box" class="tmdb-key-box" hidden>
+            <div class="tmdb-key-header">
+              <div class="tmdb-key-title-group">
+                <span class="tmdb-key-icon" aria-hidden="true">🔑</span>
+                <div>
+                  <h3 class="tmdb-key-title">Llave de conexión a TMDB (API Key)</h3>
+                  <p id="tmdb-key-status" class="tmdb-key-status">
+                    Introduce tu API Key gratuita de TMDB para buscar películas reales en español.
+                  </p>
+                </div>
+              </div>
+              <button type="button" id="toggle-key-form-btn" class="btn-secondary btn-small" hidden>
+                Cambiar llave
+              </button>
+            </div>
+
+            <!-- Formulario para pegar y guardar la API Key en este navegador -->
+            <div id="tmdb-key-form" class="tmdb-key-form">
+              <label for="tmdb-api-key-input" class="tmdb-key-label">
+                Pega aquí tu API Key (v3) o Token de lectura (v4) de TMDB:
+              </label>
+              <div class="tmdb-key-input-row">
+                <input
+                  type="password"
+                  id="tmdb-api-key-input"
+                  class="tmdb-key-input"
+                  placeholder="Ej: a1b2c3d4e5f6g7h8i9j0..."
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+                <button type="button" id="toggle-key-visibility-btn" class="btn-secondary btn-small">
+                  Mostrar
+                </button>
+                <button type="button" id="save-tmdb-key-btn" class="btn-primary btn-small">
+                  Guardar llave
+                </button>
+                <button type="button" id="clear-tmdb-key-btn" class="btn-secondary btn-small" hidden>
+                  Borrar
+                </button>
+              </div>
+
+              <!-- Guía desplegable paso a paso para quienes aún no tienen su API Key -->
+              <details class="tmdb-help-details">
+                <summary>¿Aún no tienes tu API Key gratuita? Mira cómo conseguirla en 2 minutos</summary>
+                <div class="tmdb-help-content">
+                  <ol class="tmdb-help-steps">
+                    <li>
+                      Entra en <a href="https://www.themoviedb.org/signup" target="_blank" rel="noopener noreferrer">themoviedb.org</a> y crea una cuenta gratuita (y confirma tu correo).
+                    </li>
+                    <li>
+                      Abre tu perfil (arriba a la derecha) ➔ <strong>Ajustes (Settings)</strong> ➔ sección <strong>API</strong> en el menú lateral (<a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noopener noreferrer">enlace directo a Ajustes de API</a>).
+                    </li>
+                    <li>
+                      Si es tu primera vez, pulsa en <strong>Crear / Request an API Key</strong>, elige la opción <strong>Developer</strong>, acepta los términos y rellena los datos básicos diciendo que es para un <em>"Proyecto personal para aprender desarrollo web"</em>.
+                    </li>
+                    <li>
+                      Copia el código llamado <strong>Clave de la API (API Key v3)</strong> o el <strong>Token de acceso de lectura</strong> y pégalo en la cajita de arriba. Se guardará solo en tu navegador.
+                    </li>
+                  </ol>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <!-- Aviso informativo si falta la llave o hay algún problema -->
+          <p id="phase3-notice" class="phase3-notice" role="status" hidden></p>
+
+          <div class="recipe-actions">
+            <!-- AQUÍ PUEDES CAMBIAR EL TEXTO DEL BOTÓN QUE BUSCA PELÍCULAS REALES EN TMDB -->
+            <button type="button" id="search-movies-btn" class="btn-primary">
+              🎬 Buscar películas reales con esta receta
+            </button>
+            <button type="button" id="change-recipe-btn" class="btn-secondary">
+              Cambiar mis emociones
+            </button>
+          </div>
+        </footer>
+      </article>
+
+      <!-- ========================================== -->
+      <!-- ZONA 6: CARTELERA REAL DE TMDB (FASE 3)    -->
+      <!-- ========================================== -->
+      <section id="movies-section" class="movies-section" aria-labelledby="movies-heading" hidden>
+        <header class="movies-header">
+          <div class="movies-topline">
+            <span class="recipe-eyebrow">Cartelera en Tiempo Real · TMDB (es-ES)</span>
+            <span id="movies-count-badge" class="recipe-adjustment-badge"></span>
+          </div>
+          <h2 id="movies-heading" tabindex="-1">Películas recomendadas para tu plan de hoy</h2>
+          <p id="movies-subtitle" class="recipe-subtitle"></p>
+        </header>
+
+        <!-- Mensaje de estado mientras carga o si no se encuentran películas -->
+        <div id="movies-feedback" class="movies-feedback" role="status" aria-live="polite" hidden></div>
+
+        <!-- Cuadrícula acogedora donde aparecen las tarjetas de películas con sus pósters -->
+        <div id="movies-grid" class="movies-grid"></div>
+
+        <!-- Botón de Fase 4 para refrescar la cartelera con un nuevo lote de películas -->
+        <div id="movies-batch-actions" class="movies-batch-actions" hidden>
+          <!-- AQUÍ PUEDES CAMBIAR EL TEXTO DEL BOTÓN PARA VER OTRO LOTE -->
+          <button type="button" id="next-batch-btn" class="btn-secondary">
+            🔄 Ver otro lote de películas
+          </button>
+          <span id="movies-page-info" class="movies-page-info"></span>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- ARCHIVO DE TÍTULOS YA VISTOS (PARA QUE NO SE REPITAN)      -->
+        <!-- ========================================================== -->
+        <details id="watched-drawer" class="watched-drawer" hidden>
+          <summary id="watched-summary">
+            <span>👁️ Títulos que ya has visto (<strong id="watched-count">0</strong>) — ocultos del buscador</span>
+          </summary>
+          <div class="watched-drawer-body">
+            <p class="watched-drawer-hint">
+              Estas películas y series se guardan en tu navegador y nunca volverán a salirte en las recomendaciones. Si quieres que alguna vuelva a aparecer, pulsa su botón <strong>«Quitar»</strong>.
+            </p>
+            <ul id="watched-list" class="watched-list" role="list"></ul>
+            <div class="watched-drawer-actions">
+              <button type="button" id="clear-watched-btn" class="btn-secondary btn-small">
+                Restaurar todos los títulos vistos
+              </button>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- ZONA 8: MI BOTIQUÍN (FASE 5 Y FASE 7)      -->
+    </main>
+
+    <!-- Pie de página sencillo -->
+    <footer class="site-footer">
+      <p>El Plan Diario · Cine y series según cómo late tu día</p>
+      <p class="tmdb-attribution">
+        Datos, pósters y disponibilidad en streaming proporcionados por <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">TMDB</a> y JustWatch (este producto utiliza la API de TMDB pero no está avalado ni certificado por TMDB).
+      </p>
+    </footer>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- ZONA 7: VENTANA MODAL DE DETALLES (FASE 4) -->
+  <!-- ========================================== -->
+  <!-- Usamos <dialog> nativo con closedby="any" para cerrar haciendo clic fuera o pulsando Esc -->
+  <dialog id="movie-detail-dialog" class="movie-dialog" closedby="any" aria-labelledby="movie-dialog-title">
+    <div class="movie-dialog-surface">
+      <header class="movie-dialog-header">
+        <div class="movie-dialog-title-wrap">
+          <span id="movie-dialog-eyebrow" class="recipe-eyebrow">Ficha de cine · TMDB</span>
+          <h2 id="movie-dialog-title" class="movie-dialog-title">Cargando película...</h2>
+        </div>
+        <!-- Botón nativo de cierre dentro de form method="dialog" -->
+        <form method="dialog">
+          <button type="submit" value="close" class="movie-dialog-close" aria-label="Cerrar detalles de la película" autofocus>
+            ✕
+          </button>
+        </form>
+      </header>
+
+      <!-- Estado de carga o aviso dentro de la ventana -->
+      <div id="movie-dialog-status" class="movie-dialog-status" role="status" aria-live="polite" hidden></div>
+
+      <!-- Cuerpo principal con póster, datos, sinopsis, plataformas y tráiler -->
+      <div id="movie-dialog-body" class="movie-dialog-body">
+        <div class="movie-dialog-hero">
+          <div id="movie-dialog-poster-wrap" class="movie-dialog-poster-wrap"></div>
+
+          <div class="movie-dialog-info">
+            <div id="movie-dialog-meta" class="movie-dialog-meta"></div>
+            <ul id="movie-dialog-genres" class="genre-pill-list" role="list"></ul>
+            <p id="movie-dialog-tagline" class="movie-dialog-tagline" hidden></p>
+            <p id="movie-dialog-overview" class="movie-dialog-overview"></p>
+          </div>
+        </div>
+
+        <!-- Bloque: Reparto y dirección (Fase 13 · credits de TMDB) -->
+        <section id="movie-dialog-credits-section" class="movie-dialog-section" aria-labelledby="dialog-credits-heading">
+          <h3 id="dialog-credits-heading" class="movie-dialog-section-title">
+            <span aria-hidden="true">🎭</span> Reparto y dirección
+          </h3>
+          <div id="movie-dialog-credits" class="credits-container"></div>
+        </section>
+
+        <!-- Bloque: ¿Dónde verla en streaming? -->
+        <section class="movie-dialog-section" aria-labelledby="dialog-providers-heading">
+          <h3 id="dialog-providers-heading" class="movie-dialog-section-title">
+            <span aria-hidden="true">📺</span> ¿Dónde verla? <span id="movie-dialog-country" class="dialog-country-tag">(España)</span>
+          </h3>
+          <div id="movie-dialog-providers" class="providers-container"></div>
+        </section>
+
+        <!-- Bloque: Tráiler en YouTube -->
+        <section class="movie-dialog-section" aria-labelledby="dialog-trailer-heading">
+          <div class="dialog-trailer-header">
+            <h3 id="dialog-trailer-heading" class="movie-dialog-section-title">
+              <span aria-hidden="true">🎞️</span> Tráiler oficial
+            </h3>
+            <a
+              id="movie-dialog-youtube-link"
+              class="btn-secondary btn-small"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              hidden
+            >
+              ▶ Abrir en YouTube
+            </a>
+          </div>
+          <div id="movie-dialog-trailer" class="trailer-container"></div>
+        </section>
+      </div>
+
+      <!-- Pie de la ventana modal con acciones rápidas -->
+      <footer class="movie-dialog-footer">
+        <button type="button" id="dialog-favorite-btn" class="btn-secondary btn-small" aria-pressed="false">
+          🤍 Guardar en mi Botiquín
+        </button>
+        <!-- Botón de Fase 11: comparte el plan por WhatsApp/nativo o lo copia al portapapeles -->
+        <button type="button" id="dialog-share-btn" class="btn-secondary btn-small">
+          📤 Compartir plan
+        </button>
+        <button type="button" id="dialog-similar-btn" class="btn-primary btn-small">
+          ✨ Dame otra parecida
+        </button>
+        <button type="button" id="dialog-watched-btn" class="btn-secondary btn-small">
+          👁️ Ya la vi (ocultar)
+        </button>
+        <form method="dialog" class="dialog-close-form-footer">
+          <button type="submit" value="close" class="btn-secondary btn-small">
+            Cerrar ficha
+          </button>
+        </form>
+      </footer>
+    </div>
+  </dialog>
+
+  <!-- ========================================================== -->
+  <!-- ZONA 9: VENTANA MODAL DE FILTROS OPCIONALES (FASE 9)       -->
+  <!-- ========================================================== -->
+  <!-- Se abre desde el botón superior "🪄 Filtros opcionales" con Invoker Commands (commandfor/command) -->
+  <dialog id="magic-filters-dialog" class="movie-dialog magic-filters-dialog" closedby="any" aria-labelledby="magic-filters-heading">
+    <div class="movie-dialog-surface">
+      <header class="movie-dialog-header">
+        <div class="movie-dialog-title-wrap">
+          <span class="recipe-eyebrow">Toques Mágicos · Opcional</span>
+          <h2 id="magic-filters-heading" class="movie-dialog-title">
+            <span aria-hidden="true">🪄</span> Filtros opcionales
+          </h2>
+        </div>
+        <!-- Botón de cierre declarativo (command="close" fuera de <form method="dialog">) -->
+        <button
+          type="button"
+          commandfor="magic-filters-dialog"
+          command="close"
+          class="movie-dialog-close"
+          aria-label="Cerrar filtros opcionales"
+          autofocus
+        >
+          ✕
+        </button>
+      </header>
+
+      <div class="movie-dialog-body">
+        <!-- Usamos <search> y <fieldset>+<legend> con botones radio accesibles -->
+        <search class="magic-filters-box magic-filters-modal-box" aria-labelledby="magic-filters-heading">
+          <div class="magic-filters-header">
+            <p class="magic-filters-desc">
+              ¿Quieres afinar aún más tu plan de hoy? Elige solo lo que necesites y se aplicará automáticamente a tu receta y a TMDB.
+            </p>
+            <div class="magic-filters-header-actions">
+              <span id="active-filters-badge" class="active-filters-badge" hidden>0 activos</span>
+              <button type="button" id="reset-filters-btn" class="rating-reset-btn" hidden>
+                Limpiar filtros
+              </button>
+            </div>
+          </div>
+
+          <div class="magic-filters-grid">
+            <!-- Filtro 1: Tiempo disponible -->
+            <fieldset class="filter-fieldset">
+              <legend id="filter-time-legend" class="filter-legend">⏱️ Tiempo disponible</legend>
+              <div class="filter-chips-row">
+                <div class="filter-chip-item">
+                  <input type="radio" id="time-any" name="filter-time" value="cualquiera" class="visually-hidden" checked />
+                  <label for="time-any" class="filter-chip-label">Cualquiera</label>
+                </div>
+                <div class="filter-chip-item">
+                  <input type="radio" id="time-short" name="filter-time" value="corta" class="visually-hidden" />
+                  <label for="time-short" id="label-time-short" class="filter-chip-label">Cortita (≤ 95 min)</label>
+                </div>
+                <div class="filter-chip-item">
+                  <input type="radio" id="time-normal" name="filter-time" value="normal" class="visually-hidden" />
+                  <label for="time-normal" id="label-time-normal" class="filter-chip-label">Estándar (95–125 min)</label>
+                </div>
+                <div class="filter-chip-item">
+                  <input type="radio" id="time-long" name="filter-time" value="larga" class="visually-hidden" />
+                  <label for="time-long" id="label-time-long" class="filter-chip-label">Maratón (&gt; 125 min)</label>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Filtro 2: Nivel de energía mental -->
+            <fieldset class="filter-fieldset">
+              <legend class="filter-legend">🧠 Nivel de energía mental</legend>
+              <div class="filter-chips-row">
+                <div class="filter-chip-item">
+                  <input type="radio" id="energy-any" name="filter-energy" value="cualquiera" class="visually-hidden" checked />
+                  <label for="energy-any" class="filter-chip-label">Cualquiera</label>
+                </div>
+                <div class="filter-chip-item">
+                  <input type="radio" id="energy-light" name="filter-energy" value="ligera" class="visually-hidden" />
+                  <label for="energy-light" class="filter-chip-label">☁️ Ligera</label>
+                </div>
+                <div class="filter-chip-item">
+                  <input type="radio" id="energy-medium" name="filter-energy" value="media" class="visually-hidden" />
+                  <label for="energy-medium" class="filter-chip-label">⚖️ Media</label>
+                </div>
+                <div class="filter-chip-item">
+                  <input type="radio" id="energy-intense" name="filter-energy" value="intensa" class="visually-hidden" />
+                  <label for="energy-intense" class="filter-chip-label">🔥 Intensa</label>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Filtro 3: ¿Con quién la ves? -->
+            <fieldset class="filter-fieldset">
+              <legend class="filter-legend">👥 ¿Con quién la ves?</legend>
+              <div class="filter-chips-row">
+                <div class="filter-chip-item">
+                  <input type="radio" id="company-any" name="filter-company" value="cualquiera" class="visually-hidden" checked />
+                  <label for="company-any" class="filter-chip-label">Cualquiera</label>
+                </div>
+                <div class="filter-chip-item">
+                  <input type="radio" id="company-solo" name="filter-company" value="solo" class="visually-hidden" />
+                  <label for="company-solo" class="filter-chip-label">🎧 A solas</label>
+                </div>
+                <div class="filter-chip-item">
+                  <input type="radio" id="company-partner" name="filter-company" value="pareja" class="visually-hidden" />
+                  <label for="company-partner" class="filter-chip-label">💛 En pareja</label>
+                </div>
+                <div class="filter-chip-item">
+                  <input type="radio" id="company-friends" name="filter-company" value="amigos" class="visually-hidden" />
+                  <label for="company-friends" class="filter-chip-label">🍕 Con amigos</label>
+                </div>
+                <div class="filter-chip-item">
+                  <input type="radio" id="company-family" name="filter-company" value="familia" class="visually-hidden" />
+                  <label for="company-family" class="filter-chip-label">🏡 En familia</label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </search>
+      </div>
+
+      <footer class="movie-dialog-footer magic-filters-dialog-footer">
+        <button
+          type="button"
+          commandfor="magic-filters-dialog"
+          command="close"
+          class="btn-primary btn-small"
+        >
+          ✓ Listo, aplicar filtros
+        </button>
+      </footer>
+    </div>
+  </dialog>
+
+  <!-- ====================================================================== -->
+  <!-- PANEL MODAL: 💊 MI BOTIQUÍN DE CINE Y SERIES (FASE 16)                 -->
+  <!-- ====================================================================== -->
+  <!-- Se abre directamente desde el botón superior "💊 Mi Botiquín" sin bajar al final de la página -->
+  <dialog id="botiquin-dialog" class="movie-dialog botiquin-dialog" closedby="any" aria-labelledby="botiquin-heading">
+    <div class="movie-dialog-surface">
+      <header class="movie-dialog-header">
+        <div class="movie-dialog-title-wrap">
+          <div class="botiquin-dialog-topline">
+            <span class="recipe-eyebrow">Guardados en tu navegador</span>
+            <span id="botiquin-count-badge" class="recipe-adjustment-badge">0 títulos guardados</span>
+          </div>
+          <!-- AQUÍ PUEDES CAMBIAR EL NOMBRE DE TU LISTA DE FAVORITAS -->
+          <h2 id="botiquin-heading" class="movie-dialog-title" tabindex="-1">
+            <span aria-hidden="true">💊</span> Mi Botiquín de Cine y Series
+          </h2>
+        </div>
+        <button
+          type="button"
+          commandfor="botiquin-dialog"
+          command="close"
+          class="movie-dialog-close"
+          aria-label="Cerrar Mi Botiquín"
+          autofocus
+        >
+          ✕
+        </button>
+      </header>
+
+      <div class="movie-dialog-body botiquin-dialog-body">
+        <p class="recipe-subtitle botiquin-dialog-subtitle">
+          Tu colección personal de películas y series favoritas, siempre a mano en un clic.
+        </p>
+
+        <!-- Mensaje acogedor cuando todavía no hay ningún título guardado -->
+        <div id="botiquin-empty" class="botiquin-empty">
+          <span class="botiquin-empty-emoji" aria-hidden="true">💝</span>
+          <p>
+            Tu Botiquín todavía está vacío. Cuando busques películas o series, pulsa
+            <strong>«🤍 Guardar en mi Botiquín»</strong> en cualquier tarjeta o ficha para conservar tus favoritos aquí.
+          </p>
+        </div>
+
+        <!-- Cuadrícula con todas las películas y series guardadas en Mi Botiquín -->
+        <div id="botiquin-grid" class="movies-grid botiquin-dialog-grid" hidden></div>
+      </div>
+
+      <footer class="movie-dialog-footer botiquin-dialog-footer">
+        <button type="button" id="clear-botiquin-btn" class="btn-secondary btn-small" hidden>
+          Vaciar botiquín
+        </button>
+        <button
+          type="button"
+          commandfor="botiquin-dialog"
+          command="close"
+          class="btn-primary btn-small"
+        >
+          Cerrar
+        </button>
+      </footer>
+    </div>
+  </dialog>
+
+  <!-- Región accesible de notificaciones toast (popover="manual") y respaldo ARIA -->
+  <div id="toast-region" class="toast-region" role="region" aria-label="Notificaciones"></div>
+  <p class="visually-hidden">Anuncios de El Plan Diario</p>
+  <div id="toast-live-fallback" class="visually-hidden" aria-live="polite"></div>
+
+  <!-- Respaldo condicional para Invoker Commands (commandfor/command) en navegadores antiguos -->
+  <script type="module">
+    if (!("commandForElement" in HTMLButtonElement.prototype)) {
+      import("https://esm.run/invokers-polyfill");
+    }
+  </script>
+
+  <!-- Conectamos este archivo HTML con el archivo del cerebro (app.js) -->
+  <script src="app.js"></script>
+</body>
+</html>
